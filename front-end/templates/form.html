@@ -10,7 +10,7 @@
             <ul id="notification-list"></ul>
         </div>
         <div id="questionnaireContainer">
-            <form action="">
+            <form name="mainForm" action="">
                 <p>¿Siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
                 <form>
                     <input type="radio" id="calification1" name="classCalification" value="classCalification1" required>
@@ -32,15 +32,16 @@
                 <textarea id="calificationReason" name="calificationReason" rows="4" cols="50"></textarea><br><br>
                 <p>¿Cómo evalúa el desempeño de su profesor/a durante la(s) clase(s) de la semana? (Obligatorio): </p>
                 <form>
-                    <input type="radio" id="professorCalification1" name="professorCalification" value="professorCalification1" required>
+                    <input type="radio" id="professorCalification1" name="professorCalification" value="professorCalification1" onclick="hideReason()" required>
                     <label for="professorCalification1">Excelente</label><br>
-                    <input type="radio" id="professorCalification2" name="professorCalification" value="professorCalification2">
+                    <input type="radio" id="professorCalification2" name="professorCalification" value="professorCalification2" onclick="hideReason()">
                     <label for="professorCalification2">Aceptable</label><br>
-                    <input type="radio" id="professorCalification3" name="professorCalification" value="professorCalification3" onclick="">
+                    <input type="radio" id="professorCalification3" name="professorCalification" value="professorCalification3" onclick="unhideReason()">
                     <label for="professorCalification3">Deficiente</label><br>
-                    <input type="radio" id="professorCalification4" name="professorCalification" value="professorCalification4" onclick="">
+                    <input type="radio" id="professorCalification4" name="professorCalification" value="professorCalification4" onclick="unhideReason()">
                     <label for="professorCalification4">Insoportable</label><br>
                 </form><br><br>
+                <div id="professorCalificationReason"></div>
                 <label for="necessityFeedback">¿Qué materia de la semana desea que su profesor/a le dé más enfoque o que suba algún material complementario? (Opcional): </label><br>
                 <textarea id="necessityFeedback" name="necessityFeedback" rows="4" cols="50"></textarea><br><br>
                 <div id="sender"></div>
