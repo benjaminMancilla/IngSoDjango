@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Formulario de retroalimentación</title>
+    </head>
+    <body>
+        <div id="notificationBox" hidden>
+            <h2 id="notification-msg">.</h2>
+            <ul id="notification-list"></ul>
+        </div>
+        <div id="questionnaireContainer">
+            <form action="">
+                <p>¿Siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
+                <form>
+                    <input type="radio" id="calification1" name="classCalification" value="classCalification1" required>
+                    <label for="calification1">1</label><br>
+                    <input type="radio" id="calification2" name="classCalification" value="classCalification2">
+                    <label for="calification2">2</label><br>
+                    <input type="radio" id="calification3" name="classCalification" value="classCalification3">
+                    <label for="calification3">3</label><br>
+                    <input type="radio" id="calification4" name="classCalification" value="classCalification4">
+                    <label for="calification4">4</label><br>
+                    <input type="radio" id="calification5" name="classCalification" value="classCalification5">
+                    <label for="calification5">5</label><br>
+                    <input type="radio" id="calification6" name="classCalification" value="classCalification6">
+                    <label for="calification6">6</label><br>
+                    <input type="radio" id="calification7" name="classCalification" value="classCalification7">
+                    <label for="calification7">7</label><br>
+                </form><br><br>
+                <label for="calificationReason">La razón de la respuesta anterior es (Opcional): </label><br>
+                <textarea id="calificationReason" name="calificationReason" rows="4" cols="50"></textarea><br><br>
+                <p>¿Cómo evalúa el desempeño de su profesor/a durante la(s) clase(s) de la semana? (Obligatorio): </p>
+                <form>
+                    <input type="radio" id="professorCalification1" name="professorCalification" value="professorCalification1" required>
+                    <label for="professorCalification1">Excelente</label><br>
+                    <input type="radio" id="professorCalification2" name="professorCalification" value="professorCalification2">
+                    <label for="professorCalification2">Aceptable</label><br>
+                    <input type="radio" id="professorCalification3" name="professorCalification" value="professorCalification3" onclick="">
+                    <label for="professorCalification3">Deficiente</label><br>
+                    <input type="radio" id="professorCalification4" name="professorCalification" value="professorCalification4" onclick="">
+                    <label for="professorCalification4">Insoportable</label><br>
+                </form><br><br>
+                <label for="necessityFeedback">¿Qué materia de la semana desea que su profesor/a le dé más enfoque o que suba algún material complementario? (Opcional): </label><br>
+                <textarea id="necessityFeedback" name="necessityFeedback" rows="4" cols="50"></textarea><br><br>
+                <div id="sender"></div>
+                <button id="sendQuestionnaireButton" type="button">Enviar su retroalimentación</button>
+            </form>
+        </div>
+    </body>
+</html>
