@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'feedback_app', #Add feedback_app directory for apps
 ]
 
 MIDDLEWARE = [
