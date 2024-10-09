@@ -53,6 +53,7 @@
                 <button id="sendQuestionnaireButton" type="button">Enviar su retroalimentación</button>
             </form>
         </div>
-        <script src="../static/formValidation.js"></script>
+        {% load static %}
+        <script src="{% static 'feedback_app/js/formValidation.js' %}"></script>
     </body>
 </html>
