@@ -83,8 +83,3 @@ class AuthenticationTests(TestCase):
         self.client.login(username=self.username, password=self.password)
         response = self.client.get(reverse('login'))
         self.assertRedirects(response, reverse('home-page'))
-
-
-    
-
-
