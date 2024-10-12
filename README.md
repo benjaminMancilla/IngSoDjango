@@ -49,6 +49,15 @@ Con esto nuestro proyecto esta listo para poder trabajar. Cada vez que queramos 
 deactivate
 ```
 
+### Correr la base de datos
+
+Para poder correr la base de datos primero se debe instalar sqlite3, que es el motor que ocupa django en este proyecto. Para hacer esto se recomienda seguir las instrucciones para su sistema operativo desde la [pagina oficial de sqlite](https://www.sqlite.org/index.html)
+Una vez instalado el motor, se debe ejecutar el siguiente comando, para actualizar el esquema de la base de datos. Recordar que esto se debe hacer en la ruta de la carpeta y con el virtual environment activado.
+
+```bash
+python manage.py migrate
+```
+
 ## Modelo de datos
 
 En el siguiente diagrama se muestra el modelo de datos que manejamos actualmente en la aplicacion con sus dependencias y llaves foraneas.
