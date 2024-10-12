@@ -9,8 +9,10 @@ def root_redirect(request):
         return redirect('home-page')
     else:
         return redirect('login')
-    
+
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home-page')
     if request.method == 'GET':
         return render(request, 'feedback_app/login.html')
     if request.method == 'POST':
@@ -20,14 +22,15 @@ def login_view(request):
         if user is not None:
             #Start session
             auth_login(request, user)
-            return render(request, 'feedback_app/home-page')
+            return redirect('home-page')
         else:
-            messages.error(request, 'Usuario o contraseña incorrectos.')
-            return render(request, 'feedback_app/login.html')
-        
+            messages.error(request, 'username: ' + username + ' password: ' + password)
+            return redirect('login')
+
+@login_required
 def logout_view(request):
     auth_logout(request)
-    return render('login')
+    return redirect('login')
 
 @login_required
 def homepage(request):
