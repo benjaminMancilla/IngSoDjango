@@ -21,23 +21,6 @@
         <a href="#Feedback"> Añadir Feedback  </a>
     </div>
 
-    <!-- De prueba -->
-    <div class="logout-btn">
-      <a href="{% url 'logout' %}">Logout</a>
-    </div>
-
-    <!-- De prueba -->
-    <div class="prueba-datos-sesion">
-      <p><strong>Username:</strong> {{ request.user.username }}</p>
-      <p><strong>Password:</strong> {{ request.user.password }}</p>
-      <p><strong>Role:</strong> {{ request.user.role }}</p>
-        {% if request.user.student %}
-          <p><strong>Mask:</strong> {{ request.user.student.mask }}</p>
-        {% else %}
-          <p><strong>Mask:</strong> No es un estudiante.</p>
-        {% endif %}
-    </div>
-
     <div id="posts-list">
         <div class="posts-container">
             <div class="posts-author">
