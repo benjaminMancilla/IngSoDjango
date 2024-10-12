@@ -20,6 +20,36 @@
         .navbar-nav .nav-link:hover {
           color: #fdf6e3;
         }
+
+        .nav-icon {
+          width: 30px; /* Ajusta el tamaño según lo necesario */
+          height: 30px; /* Ajusta el tamaño según lo necesario */
+          vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+          margin-right: 5px; /* Espacio entre la imagen y el texto */
+        }
+
+        .nav-tabs {
+            background-color: #073642;
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link {
+            color: white; /* Color del texto */
+            font-size: 1.5rem;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #002b36; /* Color de fondo para la pestaña activa  igual al fondo de la página*/
+            color: white; /* Color del texto para la pestaña activa */
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link:hover {
+            color: #fdf6e3; /* Color del texto al pasar el mouse */
+        }
+
+        .nav-tabs .nav-item {
+            margin-right: 5px; /* Espacio entre las pestañas */
+        }
+
+
         #feedback-button {
           margin-top: 10px;
           text-align: center;
@@ -65,7 +95,7 @@
   <body>
 
     <!---- La navbar de la pagina--> 
-    <nav class="navbar navbar-expand-lg">
+    <!-- <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <div class="navbar-nav">
           <a class="nav-link" href="#Física">Física</a>
@@ -74,7 +104,46 @@
           <a class="nav-link ms-auto" href="#Logout">Logout</a>
         </div>
       </div>
-    </nav>
+    </nav> -->
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center active" aria-current="page" href="#Física">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
+          Física
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Biología">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
+          Biología
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Química">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
+          Química
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Historia">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
+          Historia
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Matemáticas">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
+          Matemáticas
+        </a>
+      </li>
+      <li class="nav-item ms-auto">
+        <a class="nav-link d-flex align-items-center" href="#Salir">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
+          Salir
+        </a>
+      </li>
+    </ul>
 
     <div class="container mt-4">
       <div class="row">
