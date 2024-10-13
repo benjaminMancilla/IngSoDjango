@@ -3,6 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
+from datetime import timedelta
+from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback
+
 
 def root_redirect(request):
     if request.user.is_authenticated:
@@ -34,6 +37,50 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
+    user = request.user
+    if user.is_student:
+        student_instance = Student.objects.get(user=user)
+        #Get all tuples of subjects and teachers
+        tss_list = TeacherStudentSubject.objects.filter(student=student_instance)
+
+        #Subjects list, each element has all weekly information of each subject
+        subjects_info = []
+
+        #Iterate over each tss (subject or subject/teacher tuple)
+        for tss in tss_list:
+            #Get subject and teacher
+            subject = tss.subject
+            teacher = tss.teacher
+            
+            #Get weekly information
+            resumes = SubjectResume.objects.filter(subject=subject).order_by('date')
+
+            #List of weekly information of the subject
+            weeks = []
+            for resume in resumes:
+                #Get week feedbacks, compare date with resume date (7 days)
+                feedbacks = Feedback.objects.filter(tss=tss, date__gte=resume.date, date__lte=resume.date + timedelta(days=7))
+
+                weeks.append({
+                    'date': resume.date,
+                    'resume': resume.resume,
+                    'feedbacks': feedbacks,
+                })
+
+            subjects_info.append({
+                'subject': subject,
+                'teacher': teacher,
+                'weeks': weeks
+            })
+
+        #Context info for frontend
+        context = {
+            'subjects_info': subjects_info
+        }
+        return render(request, 'feedback_app/home-page.html', context)
+    elif user.is_teacher:
+        #For the moment, teacher is not implemented
+        return render(request, 'feedback_app/home-page.html')
     return render(request, 'feedback_app/home-page.html')
 
 @login_required
