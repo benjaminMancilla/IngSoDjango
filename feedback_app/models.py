@@ -11,6 +11,14 @@ class User(AbstractUser):
     )
 
     role = models.PositiveSmallIntegerField(choices=ROLES)
+    
+    @property
+    def is_student(self):
+        return self.role == self.STUDENT
+
+    @property
+    def is_teacher(self):
+        return self.role == self.TEACHER
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
