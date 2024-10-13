@@ -84,6 +84,29 @@ def homepage(request):
         context = {
             'subjects_info': subjects_info
         }
+        #Context structure:
+        #{
+        #    'subjects_info': [
+        #        {
+        #            'subject': subject_i,
+        #            'teacher': teacher_i,
+        #            'weeks': [
+        #                {
+        #                    'date': date_j,
+        #                    'resume': resume_j,
+        #                    'feedbacks': [
+        #                        {
+        #                            'date': date_k,
+        #                            'grade': grade_k,
+        #                            'content': content_k
+        #                        }
+        #                    ],
+        #                    'week_number': week_number_j
+        #                }
+        #            ]
+        #        }
+        #    ]
+        #}
         return render(request, 'feedback_app/home-page.html', context)
     elif user.is_teacher:
         #For the moment, teacher is not implemented
