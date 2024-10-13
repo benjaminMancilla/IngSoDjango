@@ -14,7 +14,8 @@
             <p>Accederse a la plataforma</p>
             <div id="validationBox">
                 
-            <form>
+            <form method="post" action="">
+                {% csrf_token %}
                 <div>
                     <label for="userName">Usuario: </label><br>
                     <input type="text" id="userName" name="userName" minlength="3" maxlength="80" required><br>
