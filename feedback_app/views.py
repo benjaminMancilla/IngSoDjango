@@ -58,13 +58,20 @@ def homepage(request):
             #List of weekly information of the subject
             weeks = []
             for resume in resumes:
-                #Get week feedbacks, compare date with resume date (7 days)
-                feedbacks = Feedback.objects.filter(tss=tss, date__gte=resume.date, date__lte=resume.date + timedelta(days=7))
+                #Get week number
+                #IMPORTANT: for the moment we asume that the feedback deadline
+                #is exactly at the end of the week that the resume was uploaded. 
+                week_number = resume.date.isocalendar()[1]
 
+                #Get week feedbacks for the corresponding week number
+                feedbacks = Feedback.objects.filter(tss=tss, date__week=week_number)
+
+                #Add resume, feedbacks and week number to the weeks list
                 weeks.append({
                     'date': resume.date,
                     'resume': resume.resume,
                     'feedbacks': feedbacks,
+                    'week_number': week_number
                 })
 
             subjects_info.append({
@@ -81,7 +88,7 @@ def homepage(request):
     elif user.is_teacher:
         #For the moment, teacher is not implemented
         return render(request, 'feedback_app/home-page.html')
-    return render(request, 'feedback_app/home-page.html')
+
 
 @login_required
 def form(request):
