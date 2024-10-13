@@ -32,6 +32,7 @@
         <div id="questionnaireContainer">
             <form name="mainForm" action="">                <!-- ↓{{  }}    -->
                 <div class="mb-3">
+                    <br>
                     <p class="form-label">¿Siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
                     <!-- <form> -->
                     <div class="form-check form-check-inline">
@@ -61,7 +62,7 @@
                     <div class="form-check form-check-inline">
                         <input type="radio" id="calification7" name="classCalification" value="7" class="form-check-input">
                         <label for="calification7" class="form-label form-check-label">7</label><br>
-                    </div><br><br>
+                    </div><br>
                 </div>                
                     <!-- </form><br><br> -->
                 <div class="mb-3">
@@ -78,10 +79,10 @@
                     <input type="radio" id="professorCalification3" name="professorCalification" value="Deficiente" class="form-check-input" onclick="unhideReasonInput()">
                     <label for="professorCalification3" class="form-label form-check-label">Deficiente</label><br>
                     <input type="radio" id="professorCalification4" name="professorCalification" value="Insoportable" class="form-check-input" onclick="unhideReasonInput()">
-                    <label for="professorCalification4" class="form-label form-check-label">Insoportable</label><br><br><br>
+                    <label for="professorCalification4" class="form-label form-check-label">Insoportable</label><br>
                     <!-- </form><br><br> -->
                     <div id="professorCalificationReason" hidden>
-                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Obligatorio):</label>
+                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Obligatorio):</label><br>
                         <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text" required></textarea><br><br>
                     </div>                    
                 </div>

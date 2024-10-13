@@ -18,7 +18,7 @@ const validateRadio = (radioName) => {
 };
 const validateCalificationComment = (comment) => {
     if (reasonBlock.hidden) return true;
-    if (comment.trim().length <=3) return false;
+    if (comment.trim().length <=3 || comment.trim().length >= 300) return false;
     // if (!(comment.length >=3)) {
     //     return false;
     // }
