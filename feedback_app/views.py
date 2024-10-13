@@ -4,13 +4,19 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib import messages
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback
 
-
+# Redirects empty path to login page if user is not authenticated
+# or to home page if user is authenticated
 def root_redirect(request):
     if request.user.is_authenticated:
         return redirect('home-page')
     else:
         return redirect('login')
 
+# Authenticated user is redirected to home page
+# Unauthenticated user with GET request render login page
+# Unauthenticated user with POST request tries to authenticate
+# and if successful is redirected to home page
+# if not successful is redirected to login page.
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home-page')
@@ -28,11 +34,13 @@ def login_view(request):
             messages.error(request, 'username: ' + username + ' password: ' + password)
             return redirect('login')
 
+#Logs out user and redirects to login page
 @login_required
 def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
+#Renders home page with all the information of the student
 @login_required
 def homepage(request):
     user = request.user
@@ -114,7 +122,6 @@ def homepage(request):
     elif user.is_teacher:
         #For the moment, teacher is not implemented
         return render(request, 'feedback_app/home-page.html')
-
 
 @login_required
 def form(request):
