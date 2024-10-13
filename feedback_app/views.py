@@ -43,9 +43,6 @@ def homepage(request):
         #Get all tuples of subjects and teachers
         tss_list = TeacherStudentSubject.objects.filter(student=student_instance).select_related(
             'subject', 'teacher'
-        ).only(
-            'subject__name',
-            'teacher__user__username'
         )
 
         #Subjects list, each element has all weekly information of each subject
@@ -59,10 +56,7 @@ def homepage(request):
             
             #Get weekly information
             resumes = SubjectResume.objects.filter(subject=subject).select_related(
-                'teacher', 'subject'
-            ).only(
-                'date', 'resume'
-            ).order_by('date')
+                'teacher', 'subject').order_by('date')
 
             #List of weekly information of the subject
             weeks = []
@@ -75,10 +69,7 @@ def homepage(request):
                 #Get week feedbacks for the corresponding week number
                 feedbacks = Feedback.objects.filter(tss=tss, date__week=week_number).select_related(
                     'tss__teacher__user',
-                    'tss__student__user'
-                ).only(
-                    'date', 'grade', 'content'
-                ).order_by('date')
+                    'tss__student__user').order_by('date')
 
                 #Add resume, feedbacks and week number to the weeks list
                 weeks.append({
