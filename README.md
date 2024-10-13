@@ -63,3 +63,32 @@ python manage.py migrate
 En el siguiente diagrama se muestra el modelo de datos que manejamos actualmente en la aplicacion con sus dependencias y llaves foraneas.
 
 ![Database Model](./docs/Database.svg)
+
+## Estructura de datos en Home-Page para estudiantes
+
+En el frontEnd la informacion de los cursos para cada estudiante se recibe mediante la siguiente estructura de datos mediante 'context' de Django:
+
+```python
+{
+    'subjects_info': [
+        {
+            'subject': subject_i,  # Nombre de la asignatura
+            'teacher': teacher_i,   # Nombre del profesor
+            'weeks': [
+                {
+                    'date': date_j,     # Fecha de la semana
+                    'resume': resume_j, # Resumen de la clase
+                    'feedbacks': [
+                        {
+                            'date': date_k,   # Fecha del feedback
+                            'grade': grade_k, # Calificación del feedback
+                            'content': content_k # Contenido del feedback
+                        }
+                    ],
+                    'week_number': week_number_j # Número de la semana
+                }
+            ]
+        }
+    ]
+}
+
