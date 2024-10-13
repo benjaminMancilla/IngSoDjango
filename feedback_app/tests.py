@@ -45,7 +45,7 @@ class AuthenticationTests(TestCase):
             'userPassword': 'invalid',
         })
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('register'))#de prueba, deberia ser login, es para entrar a register
+        self.assertRedirects(response, reverse('login'))
     
     #Test logout view
     def test_logout(self):
