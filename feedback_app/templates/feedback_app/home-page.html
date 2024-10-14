@@ -10,28 +10,65 @@
       <a class="navbar-page" href="#Biología">Biología</a>
       <a class="navbar-page" href="#Física">Física</a>
       <a class="navbar-page" href="#Matemáticas">Matemáticas</a>
-      <a id="logout-btn" href="#Logout">Logout</a>
+      <a id="logout-btn" href="{% url 'logout' %}">Logout</a>
     </nav>
+
+    <section class="main-container">
+      <h1>Bienvenido, {{ request.user.username }}</h1>
+
+      <div id="feedback-button">
+          <a href="#Feedback"> Añadir Feedback  </a>
+      </div>
+
+      <div id="courses-list">
+        {% for subject_info in subjects_info %}
+          <div class="course">
+            <div class="course-header">
+              <h2>{{ subject_info.subject.name }}</h2>
+              <p>Profesor: {{ subject_info.teacher.user.username }}</p>
+            </div>
+            <div class="weeks">
+              {% for week in subject_info.weeks %}
+                <div class="week">
+                  <h3>Semana {{ week.week_number }} ({{ week.date }})</h3>
+                  <p><strong>Resumen:</strong> {{ week.resume }}</p>
+                  <div class="feedbacks">
+                    <h4>Feedbacks:</h4>
+                    {% for feedback in week.feedbacks %}
+                      <div class="feedback">
+                        <p><strong>Estudiante:</strong> {{ feedback.tss.student.user.username }}</p>
+                        <p><strong>Calificación:</strong> {{ feedback.grade }}</p>
+                        <p><strong>Contenido:</strong> {{ feedback.content }}</p>
+                        <p><strong>Fecha:</strong> {{ feedback.date }}</p>
+                      </div>
+                    {% empty %}
+                      <p>No hay feedbacks para esta semana.</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% empty %}
+                <p>No hay resúmenes disponibles para este curso.</p>
+              {% endfor %}
+            </div>
+          </div>
+        {% empty %}
+          <p>No estás inscrito en ningún curso.</p>
+        {% endfor %}
+      </div>
+
+      <div id="posts-list">
+          <div class="posts-container">
+              <div class="posts-author">
+                  <img src="https://images.emojiterra.com/google/android-12l/512px/1f40a.png" width="150">
+                  <p>Cocodrilo feliz</p>
+              </div>
+              <div class="posts-content">
+                  <p>Buena clase, brotheeeeer ten of ten</p>
+              </div>
+              <button type="button" id="add-comment-btn">Añadir Comentario</button>
+          </div>
+      </div>
+    </section>
   </body>
-
-  
-  <section class="main-container">
-
-    <div id="feedback-button">
-        <a href="#Feedback"> Añadir Feedback  </a>
-    </div>
-
-    <div id="posts-list">
-        <div class="posts-container">
-            <div class="posts-author">
-                <img src="https://images.emojiterra.com/google/android-12l/512px/1f40a.png" width="150">
-                <p>Cocodrilo feliz</p>
-            </div>
-            <div class="posts-content">
-                <p>Buena clase, brotheeeeer ten of ten</p>
-            </div>
-            <button type="button" id="add-comment-btn">Añadir Comentario</button>
-        </div>
-    </div>
-  </section>
 </html>
+
