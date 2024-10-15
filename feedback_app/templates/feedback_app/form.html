@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Formulario de Retroalimentación</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #002b36; /* Color oscuro como el mockup */
+            color: black;
+            font-size: 18px;
+        }
+        .container-sm {
+            position: relative;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
+            background-color: white;
+        }
+        .form-label {
+            color: #2b2d2d; /* Color de las etiquetas del formulario */
+        }
+        .form-check-input {
+            margin: 0.3rem 0.5rem; /* Espaciado para una mejor apariencia */
+        }
+        .textarea {
+            background-color: #073642; /* Fondo oscuro para los textarea */
+            border: 1px solid #586e75; /* Borde de los textarea */
+            border-radius: 5px; /* Bordes redondeados */
+            color: white; /* Color del texto */
+        }
+        #notificationBox {
+            background-color: #073642;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #CA4410; /* Color del botón */
+            border: none; /* Sin borde */
+        }
+        .btn-primary:hover {
+            background-color: #842d0b; /* Color del botón al pasar el mouse */
+            color: #ffffff; /* Color del texto al pasar el mouse */
+        }
+
+        .nav-icon {
+          width: 30px; /* Ajusta el tamaño según lo necesario */
+          height: 30px; /* Ajusta el tamaño según lo necesario */
+          vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+          margin-right: 5px; /* Espacio entre la imagen y el texto */
+        }
+
+        .nav-tabs {
+            background-color: #073642;
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link {
+            color: white; /* Color del texto */
+            font-size: 1.5rem;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #002b36; /* Color de fondo para la pestaña activa  igual al fondo de la página*/
+            color: white; /* Color del texto para la pestaña activa */
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link:hover {
+            color: #fdf6e3; /* Color del texto al pasar el mouse */
+        }
+
+        .nav-tabs .nav-item {
+            margin-right: 5px; /* Espacio entre las pestañas */
+        }
+
+        .card {
+            background-color: #033b4b;
+            color: white; /* Color del texto */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+        }
+
+        .card-header {
+            background-color: #022a35; /* Color del encabezado */
+        }
+
+    </style>
+    </head>
+    <body>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center active" aria-current="page" href="#Física">
+                <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
+                Física
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#Biología">
+                <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
+                Biología
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#Química">
+                <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
+                Química
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#Historia">
+                <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
+                Historia
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center" href="#Matemáticas">
+                <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
+                Matemáticas
+                </a>
+            </li>
+            <li class="nav-item ms-auto">
+                <a class="nav-link d-flex align-items-center" href="#Salir">
+                <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
+                Salir
+                </a>
+            </li>
+        </ul>
+
+
+        <div id="mainContainer" class="container-sm mt-4">
+            <h1>Formulario de Retroalimentación  de ______ </h1>
+            <div id="notificationBox" hidden>
+                <h2 id="notificationMsg">.</h2>
+                <ul id="notificationList"></ul>
+            </div>
+            <div id="questionnaireContainer">
+                <form name="mainForm" action="">               
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="mb-3">
+                                <br>
+                                <p class="form-label">¿Se siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
+                                <!-- <form> -->
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification1" name="classCalification" value="1" class="form-check-input" required>
+                                    <label for="calification1" class="form-label form-check-label">1</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification2" name="classCalification" value="2" class="form-check-input">
+                                    <label for="calification2" class="form-label form-check-label">2</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification3" name="classCalification" value="3" class="form-check-input">
+                                    <label for="calification3" class="form-label form-check-label">3</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification4" name="classCalification" value="4" class="form-check-input">
+                                    <label for="calification4" class="form-label form-check-label">4</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification5" name="classCalification" value="5" class="form-check-input">
+                                    <label for="calification5" class="form-label form-check-label">5</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification6" name="classCalification" value="6" class="form-check-input">
+                                    <label for="calification6" class="form-label form-check-label">6</label><br>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="calification7" name="classCalification" value="7" class="form-check-input">
+                                    <label for="calification7" class="form-label form-check-label">7</label><br>
+                                </div>
+                                <br>
+                            </div>                
+                            <!-- </form><br><br> -->
+                            <div class="mb-3">
+                                <label for="calificationReason" class="form-label">La razón de la respuesta anterior es... (Opcional): </label><br>
+                                <textarea id="calificationReason" name="calificationReason" rows="4" cols="50" class="form-text"></textarea><br><br>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="col-md-4">    
+                            <div class="card mb-3" id="resumen" style="max-width: 18rem;" hidden>
+                                <div class="card-header" id="resumenHeader">Resumen</div>
+                                <div class="card-body">
+                                    <h5 class="card-title" id="resumenTitle">Semana 1</h5>
+                                    <p class="card-text" id="resumenContent">Clase introductoria, hablamos sobre lo que se verá en el curso y las evaluaciones a tener.</p>
+                                </div>
+                            </div>
+                        </div>     
+
+        <h1>Formulario de Retroalimentación  de ______ </h1>
+        <div id="notificationBox" hidden>
+            <h2 id="notificationMsg">.</h2>
+            <ul id="notificationList"></ul>
+        </div>
+        <div id="questionnaireContainer">
+            <form name="mainForm" action="">               
+                <div class="mb-3">
+                    <br>
+                    <p class="form-label">¿Siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
+                    <!-- <form> -->
+                    <div class="form-check form-check-inline">
+                        <input type="radio" id="calification1" name="classCalification" value="1" class="form-check-input" required>
+                        <label for="calification1" class="form-label form-check-label">1</label><br>
+                    </div>
+
+                    <div class="mb-3">   
+                            <p class="form-label">¿Cómo evalúa el desempeño de su profesor/a durante la(s) clase(s) de la semana? (Obligatorio): </p>
+                            <!-- <form> -->
+                        <div class="form-check form-check-inline">       
+                            <input type="radio" id="professorCalification1" name="professorCalification" value="Excelente" class="form-check-input" onclick="hideReasonInput()" required>
+                            <label for="professorCalification1" class="form-label form-check-label">Excelente</label><br>
+                        </div>    
+                        <div class="form-check form-check-inline">     
+                            <input type="radio" id="professorCalification2" name="professorCalification" value="Aceptable" class="form-check-input" onclick="hideReasonInput()">
+                            <label for="professorCalification2" class="form-label form-check-label">Aceptable</label><br>
+                        </div>    
+                        <div class="form-check form-check-inline">     
+                            <input type="radio" id="professorCalification3" name="professorCalification" value="Deficiente" class="form-check-input" onclick="unhideReasonInput()">
+                            <label for="professorCalification3" class="form-label form-check-label">Deficiente</label><br>
+                        </div>    
+                        <div class="form-check form-check-inline">     
+                            <input type="radio" id="professorCalification4" name="professorCalification" value="Insoportable" class="form-check-input" onclick="unhideReasonInput()">
+                            <label for="professorCalification4" class="form-label form-check-label">Insoportable</label><br>
+                        </div> 
+                        <!-- </form><br><br> -->
+                        <div id="professorCalificationReason" hidden>
+                            <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Obligatorio):</label><br>
+                            <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text" required></textarea><br><br>
+                        </div>                    
+                    </div>
+                    <div class="mb-3">
+                        <label for="necessityFeedback" class="form-label">¿Qué materia de la semana desea que su profesor/a le dé más enfoque o que suba algún material complementario? (Opcional): </label><br>
+                        <textarea id="necessityFeedback" name="necessityFeedback" rows="4" cols="50" class="form-text"></textarea><br>
+                    </div>
+                    <div id="sender"></div>
+                    <div class="d-flex justify-content-end">
+                        <button id="sendQuestionnaireButton" type="button" class="btn btn-primary me-3">Enviar su retroalimentación</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="../../static/feedback_app/js/formValidation.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+</html>

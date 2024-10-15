@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Index</title>
+        <style>
+            body{
+            /* margin: 0; */
+            background-color: rgb(21, 110, 111);
+            background-image: url('https://humanidades.ing.uchile.cl/images/edificio.jpg');
+            /* background-size: cover; */
+            }
+            div.loginContainer {
+            width:34%;                
+            height: 38%;              
+            padding: 10px;              
+            margin-top: 10%;  
+            margin-left: 56%;
+            text-align: center;                   
+            align-items: center;        
+            justify-content: center;     
+            background-color: gray;
+            border-radius: 30px; 
+            }
+            /* form {
+
+            } */
+        </style>
+    </head>
+    <body>
+        <div id="imageContainer"></div>
+        <!-- <div id="validationBox" hidden>
+            <h2 id="val-msg">.</h2>
+            <ul id="val-list"></ul>
+        </div> -->
+        <div id="SectionLogin" class="loginContainer">
+            <h1>Accederse a la plataforma</h1><br>
+            <div id="notificationBox" hidden>
+                <!-- <h2 id="notificationMsg">.</h2> -->
+                <ul id="notificationList"></ul>
+            </div>
+            <form name="loginForm" method="post" action="">
+                {% csrf_token %}
+                <div>
+                    <label for="userName">Usuario: </label><br>
+                    <input type="text" id="userName" name="userName" minlength="3" maxlength="80" required><br>
+                    <label for="userPassword">Contraseña: </label><br>
+                    <input type="password" id="userPassword" name="userPassword" minlength="3" maxlength="40" required><br>
+                </div>
+                <div id="formContainer"></div>                
+                <button id="sendInfo" type="sumbit">Ingresar</button><br>
+                <input type="button" value="ayuda con la contraseña" onclick="window.location.href='https://www.google.cl/';"><br>
+            </form>
+        </div>
+        <script src="../../static/feedback_app/js/loginValidation.js"></script>
+    </body>
+</html>
