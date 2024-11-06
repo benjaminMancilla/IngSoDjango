@@ -1,74 +1,206 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <title>Home</title>
-    <!-- <link rel="stylesheet" href=""/> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Foro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+          background-color: #002b36; /* Color oscuro como el mockup */
+          color: white;
+        }
+        .navbar {
+          background-color: #073642; 
+        }
+        .navbar-nav .nav-link {
+          color: white;
+          font-size: 1.5rem;
+        }
+        .navbar-nav .nav-link:hover {
+          color: #fdf6e3;
+        }
+
+        .nav-icon {
+          width: 30px; /* Ajusta el tamaño según lo necesario */
+          height: 30px; /* Ajusta el tamaño según lo necesario */
+          vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+          margin-right: 5px; /* Espacio entre la imagen y el texto */
+        }
+
+        .nav-tabs {
+            background-color: #073642;
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link {
+            color: white; /* Color del texto */
+            font-size: 1.5rem;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #002b36; /* Color de fondo para la pestaña activa  igual al fondo de la página*/
+            color: white; /* Color del texto para la pestaña activa */
+            border-bottom: none;
+        }
+        .nav-tabs .nav-link:hover {
+            color: #fdf6e3; /* Color del texto al pasar el mouse */
+        }
+
+        .nav-tabs .nav-item {
+            margin-right: 5px; /* Espacio entre las pestañas */
+        }
+
+
+        #feedback-button {
+          margin-top: 10px;
+          text-align: center;
+        }
+        .posts-container {
+          background-color: #073642;
+          border-radius: 8px;
+          margin: 15px;
+          padding: 15px;
+        }
+        .posts-author {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+        .posts-author img {
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+        .posts-content {
+          background-color: #002b36;
+          border: 1px solid #586e75;
+          padding: 10px;
+          border-radius: 5px;
+        }
+        .class-list {
+          background-color: #073642;
+          border-radius: 8px;
+          padding: 10px;
+        }
+        .class-list .list-group-item {
+          background-color: transparent;
+          color: #93a1a1;
+          border: none;
+        }
+        .class-list .list-group-item.active {
+          background-color: #268bd2;
+          color: white;
+          font-weight: bold;
+        }
+      </style>
   </head>
   <body>
-    <nav class="navbar">
-      <a class="navbar-page" href="#Biología">Biología</a>
-      <a class="navbar-page" href="#Física">Física</a>
-      <a class="navbar-page" href="#Matemáticas">Matemáticas</a>
-      <a id="logout-btn" href="{% url 'logout' %}">Logout</a>
-    </nav>
 
-    <section class="main-container">
-      <h1>Bienvenido, {{ request.user.username }}</h1>
-
-      <div id="feedback-button">
-          <a href="#Feedback"> Añadir Feedback  </a>
+    <!---- La navbar de la pagina--> 
+    <!-- <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <div class="navbar-nav">
+          <a class="nav-link" href="#Física">Física</a>
+          <a class="nav-link" href="#Biología">Biología</a>
+          <a class="nav-link" href="#Matemáticas">Matemáticas</a>
+          <a class="nav-link ms-auto" href="#Logout">Logout</a>
+        </div>
       </div>
+    </nav> -->
 
-      <div id="courses-list">
-        {% for subject_info in subjects_info %}
-          <div class="course">
-            <div class="course-header">
-              <h2>{{ subject_info.subject.name }}</h2>
-              <p>Profesor: {{ subject_info.teacher.user.username }}</p>
-            </div>
-            <div class="weeks">
-              {% for week in subject_info.weeks %}
-                <div class="week">
-                  <h3>Semana {{ week.week_number }} ({{ week.date }})</h3>
-                  <p><strong>Resumen:</strong> {{ week.resume }}</p>
-                  <div class="feedbacks">
-                    <h4>Feedbacks:</h4>
-                    {% for feedback in week.feedbacks %}
-                      <div class="feedback">
-                        <p><strong>Estudiante:</strong> {{ feedback.tss.student.user.username }}</p>
-                        <p><strong>Calificación:</strong> {{ feedback.grade }}</p>
-                        <p><strong>Contenido:</strong> {{ feedback.content }}</p>
-                        <p><strong>Fecha:</strong> {{ feedback.date }}</p>
-                      </div>
-                    {% empty %}
-                      <p>No hay feedbacks para esta semana.</p>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% empty %}
-                <p>No hay resúmenes disponibles para este curso.</p>
-              {% endfor %}
-            </div>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center active" aria-current="page" href="#Física">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
+          Física
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Biología">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
+          Biología
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Química">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
+          Química
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Historia">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
+          Historia
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center" href="#Matemáticas">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
+          Matemáticas
+        </a>
+      </li>
+      <li class="nav-item ms-auto">
+        <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
+          Salir
+        </a>
+      </li>
+    </ul>
+
+    <div class="container mt-4">
+      <div class="row">
+        <!--La lista con clases al lado -->
+        <div class="col-md-3">
+          <div class="class-list">
+            <ul class="list-group">
+              <li class="list-group-item active">Clase 1: Introducción</li>
+              <li class="list-group-item">Clase 2: Suma</li>
+              <li class="list-group-item">Clase 3: Resta</li>
+              <li class="list-group-item">Clase 4: Multiplicación</li>
+              <li class="list-group-item">Clase 5: División</li>
+            </ul>
           </div>
-        {% empty %}
-          <p>No estás inscrito en ningún curso.</p>
-        {% endfor %}
-      </div>
+        </div>
 
-      <div id="posts-list">
-          <div class="posts-container">
+        <!-- Parte principal para posts del foro y el boton de feedback -->
+        <div class="col-md-6">
+          <!-- Feedback Button -->
+          <div id="feedback-button">
+            <button class="btn btn-primary">7d 3h 5m - Añadir Feedback</button>
+          </div>
+
+          <!-- Posts -->
+          <div id="posts-list">
+            <div class="posts-container">
               <div class="posts-author">
-                  <img src="https://images.emojiterra.com/google/android-12l/512px/1f40a.png" width="150">
-                  <p>Cocodrilo feliz</p>
+                <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
+                <p>Gato Anonimo</p>
               </div>
               <div class="posts-content">
-                  <p>Buena clase, brotheeeeer ten of ten</p>
+                <p>Me quedaron dudas de cuantas pruebas son.</p>
               </div>
-              <button type="button" id="add-comment-btn">Añadir Comentario</button>
+            </div>
+            <div class="posts-container">
+              <div class="posts-author">
+                <img src="https://images.emojiterra.com/google/android-12l/512px/1f415.png" width="50" alt="Perro">
+                <p>Perro Anonimo</p>
+              </div>
+              <div class="posts-content">
+                <p>No me gusta matemáticas...</p>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- Columna derecha, resumen de la clase -->
+        <div class="col-md-3">
+          <div class="summary">
+            <h4>Resumen</h4>
+            <p>Clase introductoria, hablamos sobre lo que se vera en el curso y las evaluaciones a tener.</p>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
-
