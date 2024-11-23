@@ -1,0 +1,65 @@
+body {
+    background-color: #002b36; /* Color oscuro como el mockup */
+    color: white;
+  }
+
+  #feedback-button {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .posts-container {
+    background-color: #073642;
+    border-radius: 8px;
+    margin: 15px;
+    padding: 15px;
+  }
+  .posts-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .posts-author img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .posts-content {
+    background-color: #002b36;
+    border: 1px solid #586e75;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .class-list {
+    background-color: #073642;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .class-list .list-group-item {
+    background-color: transparent;
+    color: #93a1a1;
+    border: none;
+  }
+  .class-list .list-group-item.active {
+    background-color: #268bd2;
+    color: white;
+    font-weight: bold;
+  }
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+  .dropdown-menu .dropdown-item {
+    min-width: 100px;
+    max-width: 250px;
+    white-space: normal;
+  }
+  .personalInfoContainer{
+    position: fixed;
+    top: 50%;
+    left: 70%;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    z-index: 9999; 
+    border-radius: 10px;
+  }
