@@ -1,0 +1,48 @@
+body {
+    background-color: #002b36; /* Color oscuro como el mockup */
+    color: black;
+    font-size: 18px;
+}
+.container-sm {
+    position: relative;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
+    background-color: white;
+}
+.form-label {
+    color: #2b2d2d; /* Color de las etiquetas del formulario */
+}
+.form-check-input {
+    margin: 0.3rem 0.5rem; /* Espaciado para una mejor apariencia */
+}
+.textarea {
+    background-color: #073642; /* Fondo oscuro para los textarea */
+    border: 1px solid #586e75; /* Borde de los textarea */
+    border-radius: 5px; /* Bordes redondeados */
+    color: white; /* Color del texto */
+}
+#notificationBox {
+    background-color: #073642;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.btn-primary {
+    background-color: #CA4410; /* Color del botón */
+    border: none; /* Sin borde */
+}
+.btn-primary:hover {
+    background-color: #842d0b; /* Color del botón al pasar el mouse */
+    color: #ffffff; /* Color del texto al pasar el mouse */
+}
+
+.card {
+    background-color: #033b4b;
+    color: white; /* Color del texto */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.card-header {
+    background-color: #022a35; /* Color del encabezado */
+}
