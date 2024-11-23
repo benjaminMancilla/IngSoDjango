@@ -146,9 +146,11 @@ def homepage(request, subject=None, classId=None):
             })
 
         ##Context info for frontend
+        
         context = {
             'subjects_info': subjects_info
         }
+
         ##Context structure:
         #{
         #    'subjects_info': [
