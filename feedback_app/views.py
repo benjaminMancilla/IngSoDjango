@@ -220,5 +220,5 @@ def homepage(request, subject=None, classId=None):
         return render(request, 'feedback_app/home-page.html')
 
 @login_required
-def form(request):
+def form(request, subject=None, classId=None, userId=None):
     return render(request, 'feedback_app/form.html')
