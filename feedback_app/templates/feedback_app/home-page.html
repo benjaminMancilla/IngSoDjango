@@ -99,6 +99,16 @@
           max-width: 250px;
           white-space: normal;
         }
+        .personalInfoContainer{
+          position: fixed;
+          top: 50%;
+          left: 70%;
+          background-color: rgba(255, 255, 255, 0.9);
+          padding: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+          z-index: 9999; 
+          border-radius: 10px;
+        }
       </style>
   </head>
   <body>
@@ -114,7 +124,25 @@
         </div>
       </div>
     </nav> -->
-    
+    <div id="personalInfoContainer" class="personalInfoContainer">
+      <h1>{{user.first_name}} {{user.last_name}}</h1> <br>
+      <p>Correo: {{user.email}}</p> <br>
+      <p>Fecha de ingreso: {{date_joined}}</p> <br>
+      <p>...</p> <br>
+    </div>
+
+    {% if student %}
+    {% %}
+
+
+
+    {% elif teacher %}
+
+
+    {% else %}
+
+
+    {% endif %}
 
     <ul class="nav nav-tabs">
       <li class="nav-item dropdown">
@@ -128,12 +156,16 @@
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/6747/6747138.png">
           Ciencias Sociales
         </a>
+        
         <ul class="dropdown-menu" aria-labelledby="principalsClasses">
-          <li><a class="dropdown-item d-flex align-items-center" href="#Lenguaje">
+
+          {% for subject in socialSubjectList %}
+          <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7416/7416864.png">
-            Lengua y Literatura
+            {{subject.subjectName}}
           </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Historia">
+          {% end for %}
+          <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Historia">
             <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
             Historia, Geografía y Ciencias Sociales
           </a></li>
@@ -148,7 +180,7 @@
           <li><a class="dropdown-item d-flex align-items-center" href="#Música">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/2753/2753286.png">
             Música
-          </a></li>
+          </a></li> -->
         </ul>
       </li>
 
@@ -163,12 +195,16 @@
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8419/8419106.png">
           Ciencias Exactas
         </a>
+
         <ul class="dropdown-menu" aria-labelledby="exactScience">
-          <li><a class="dropdown-item d-flex align-items-center" href="#Matemáticas">
+
+          {% for subject in exactSubjectList %}
+          <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
             <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
-            Matemáticas
+            {{subject.subjectName}}
           </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Física">
+          {% end for %}
+          <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Física">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
             Física
           </a></li>
@@ -179,7 +215,7 @@
           <li><a class="dropdown-item d-flex align-items-center" href="#Química">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
             Química
-          </a></li>
+          </a></li> -->
         </ul>
       </li>
       <li class="nav-item dropdown">
@@ -193,15 +229,21 @@
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8324/8324364.png">
           Complementarios
         </a>
+
         <ul class="dropdown-menu" aria-labelledby="complementary">
-          <li><a class="dropdown-item d-flex align-items-center" href="#EducaciónFísica">
+
+          {% for subject in complementarySubjectList %}
+          <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/5388/5388915.png">
-            Educación Física y Salud
+            {{subject.subjectName}}
           </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Tecnología">
+          {% end for %}
+
+          <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Tecnología">
             <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7017/7017556.png">
             Tecnología
-          </a></li>
+          </a></li> -->
+
         </ul>
       </li>
     
@@ -270,6 +312,7 @@
         </div>
 
         <!-- Parte principal para posts del foro y el boton de feedback -->
+         {% if not id %}
         <div class="col-md-6">
           <!-- Feedback Button -->
           <div id="feedback-button">
