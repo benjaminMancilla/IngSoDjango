@@ -46,7 +46,11 @@ def logout_view(request):
 
 ##Renders home page with all the information of the student
 @login_required
-def homepage(request):
+def homepage(request, subject=None, classId=None):
+
+    socialSubjects = ["Lengua y Literatura", "Historia, Geografía y Ciencias Sociales", "Inglés", "Artes Visuales", "Música", ]
+    exactSubjects = ["Matemáticas", "Física", "Biología", "Química", ]
+    complementarySubjects = ["Educación Física y Salud", "Tecnología", ]
     # userId = request.user.id
 
     # template = loader.get_template('home-page.html')
@@ -54,7 +58,9 @@ def homepage(request):
     user = request.user
 
     # context={
-    #         'subjectList':[],
+    #         'socialSubjectList':[],
+    #         'exactSubjectList':[],
+    #         'complementarySubjectList':[],
     #         'subjects_info':[],
     #     }
 
@@ -86,11 +92,22 @@ def homepage(request):
             subject = tss.subject
             teacher = tss.teacher
             
-            # context['subjectList'].append({
-            #     'subjectId': subject.id,
-            #     'subjectName': subject.name,
-            # })
-            
+            # if subject.name in socialSubjects:
+            #     context['socialSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in exactSubjects:
+            #     context['exactSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in complementarySubjects:
+            #     context['complementarySubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+                
             ##Get weekly information
             resumes = SubjectResume.objects.filter(subject=subject).select_related(
                 'teacher', 'subject').order_by('date')
@@ -183,10 +200,22 @@ def homepage(request):
         #     subject = tss.subject
         #     teacher = tss.teacher
             
-        #     context['subjectList'].append({
-        #         'subjectId': subject.id,
-        #         'subjectName': subject.name,
-        #     })
+            # if subject.name in socialSubjects:
+            #     context['socialSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in exactSubjects:
+            #     context['exactSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in complementarySubjects:
+            #     context['complementarySubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+
 
         return render(request, 'feedback_app/home-page.html')
 
