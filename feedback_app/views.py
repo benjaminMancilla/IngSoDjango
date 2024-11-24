@@ -146,9 +146,11 @@ def homepage(request, subject=None, classId=None):
             })
 
         ##Context info for frontend
+        
         context = {
             'subjects_info': subjects_info
         }
+
         ##Context structure:
         #{
         #    'subjects_info': [
@@ -220,5 +222,5 @@ def homepage(request, subject=None, classId=None):
         return render(request, 'feedback_app/home-page.html')
 
 @login_required
-def form(request):
+def form(request, subject=None, classId=None, userId=None):
     return render(request, 'feedback_app/form.html')
