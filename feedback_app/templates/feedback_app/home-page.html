@@ -6,17 +6,6 @@
     {% block content %}
     
 
-    <!---- La navbar de la pagina--> 
-    <!-- <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid">
-        <div class="navbar-nav">
-          <a class="nav-link" href="#Física">Física</a>
-          <a class="nav-link" href="#Biología">Biología</a>
-          <a class="nav-link" href="#Matemáticas">Matemáticas</a>
-          <a class="nav-link ms-auto" href="#Logout">Logout</a>
-        </div>
-      </div>
-    </nav> -->
     <div id="personalInfoContainer" class="personalInfoContainer">
       <h1>{{user.first_name}} {{user.last_name}}</h1> <br>
       <p>Correo: {{user.email}}</p> <br>
@@ -36,46 +25,6 @@
 
     {% endif %}
 
-
-    <!-- ------------------------------------------------------------ -->
-    <!-- <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center active" aria-current="page" href="#Física">
-          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
-          Física
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" href="#Biología">
-          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
-          Biología
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" href="#Química">
-          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
-          Química
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" href="#Historia">
-          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
-          Historia
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link d-flex align-items-center" href="#Matemáticas">
-          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
-          Matemáticas
-        </a>
-      </li>
-      <li class="nav-item ms-auto">
-        <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}">
-          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
-          Salir
-        </a>
-      </li>
-    </ul> -->
 
     <div class="container mt-4">
       <div class="row">
