@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block cssNavbar %}
-<link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/navbar.css">
+<link rel="stylesheet" type="text/css" href= "/static/feedback_app/css/navbar.css">
 {% endblock %}
 {% block nabvar %}
 <ul class="nav nav-tabs">
@@ -18,7 +18,7 @@
       
       <ul class="dropdown-menu" aria-labelledby="principalsClasses">
 
-        {% for subject in socialSubjectList %}
+        {% for subject in navbar.socialSubjectList %}
         <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7416/7416864.png">
           {{subject.subjectName}}
@@ -41,7 +41,7 @@
 
       <ul class="dropdown-menu" aria-labelledby="exactScience">
 
-        {% for subject in exactSubjectList %}
+        {% for subject in navbar.exactSubjectList %}
         <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
           {{subject.subjectName}}
@@ -63,7 +63,7 @@
 
       <ul class="dropdown-menu" aria-labelledby="complementary">
 
-        {% for subject in complementarySubjectList %}
+        {% for subject in navbar.complementarySubjectList %}
         <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/5388/5388915.png">
           {{subject.subjectName}}

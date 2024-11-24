@@ -44,16 +44,8 @@ def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
-##Renders home page with all the information of the student
-@login_required
-def homepage(request, subject=None, classId=None):
-
-    # userId = request.user.id
-
-    # template = loader.get_template('home-page.html')
-
-    user = request.user
-
+##Returns the context for the navbar
+def navbar_context(user):
     context={
         'socialSubjectList':[],
         'exactSubjectList':[],
@@ -63,8 +55,6 @@ def homepage(request, subject=None, classId=None):
 
     if user.is_student:
         student_instance = user.student
-
-        # context['student'] = user.id
 
         ##Get all tuples of subjects and teachers
         tss_list = TeacherStudentSubject.objects.filter(student=student_instance).select_related(
@@ -127,35 +117,23 @@ def homepage(request, subject=None, classId=None):
                 'weeks': weeks
             })
 
+        return context
 
+    elif user.is_teacher:
 
-        ##Context structure:
-        #{
-        #    'subjects_info': [
-        #        {
-        #            'subject': subject_i,
-        #            'teacher': teacher_i,
-        #            'weeks': [
-        #                {
-        #                    'date': date_j,
-        #                    'resume': resume_j,
-        #                    'feedbacks': [
-        #                        {
-        #                            'date': date_k,
-        #                            'grade': grade_k,
-        #                            'content': content_k
-        #                        }
-        #                    ],
-        #                    'week_number': week_number_j
-        #                }
-        #            ]
-        #        }
-        #    ]
-        #}
+        return context
 
+##Renders home page with all the information of the student
+@login_required
+def homepage(request, subject=None, classId=None):
 
-        # return HttpResponse(template.render(context, request))
+    user = request.user
 
+    context = {}
+    
+    context['navbar'] = navbar_context(user)
+
+    if user.is_student:
         
         return render(request, 'feedback_app/home-page.html', context)
     elif user.is_teacher:
