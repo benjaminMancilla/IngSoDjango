@@ -19,7 +19,7 @@
       <ul class="dropdown-menu" aria-labelledby="principalsClasses">
 
         {% for subject in navbar.socialSubjectList %}
-        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+        <li><a class="dropdown-item d-flex align-items-center" href="/foro/{{subject.teacherId}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7416/7416864.png">
           {{subject.subjectName}}
         </a></li>
@@ -42,7 +42,7 @@
       <ul class="dropdown-menu" aria-labelledby="exactScience">
 
         {% for subject in navbar.exactSubjectList %}
-        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+        <li><a class="dropdown-item d-flex align-items-center" href="/foro/{{subject.teacherId}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
           {{subject.subjectName}}
         </a></li>
@@ -64,7 +64,7 @@
       <ul class="dropdown-menu" aria-labelledby="complementary">
 
         {% for subject in navbar.complementarySubjectList %}
-        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+        <li><a class="dropdown-item d-flex align-items-center" href="/foro/{{subject.teacherId}}/{{subject.subjectId}}">
           <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/5388/5388915.png">
           {{subject.subjectName}}
         </a></li>

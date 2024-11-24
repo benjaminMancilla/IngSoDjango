@@ -1,0 +1,77 @@
+{% extends 'navbar.html' %}
+    {% block title %} Foro {% endblock %}
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href= "/static/feedback_app/css/home-page.css">
+    {% endblock %}
+    {% block content %}
+    
+
+    <div id="personalInfoContainer" class="personalInfoContainer">
+      <h1>{{user.first_name}} {{user.last_name}}</h1> <br>
+      <p>Correo: {{user.email}}</p> <br>
+      <p>Fecha de ingreso: {{date_joined}}</p> <br>
+      <p>...</p> <br>
+    </div>
+
+    {% if student %}
+
+
+
+    {% elif teacher %}
+
+
+    {% else %}
+
+
+    {% endif %}
+
+
+    <div class="container mt-4">
+      <div class="row">
+        <!--La lista con clases al lado -->
+        <div class="col-md-3">
+          <div class="class-list">
+            <ul class="list-group">
+              <li class="list-group-item active">Clase 1: Introducción</li>
+              <li class="list-group-item">Clase 2: Suma</li>
+              <li class="list-group-item">Clase 3: Resta</li>
+              <li class="list-group-item">Clase 4: Multiplicación</li>
+              <li class="list-group-item">Clase 5: División</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Parte principal para posts del foro y el boton de feedback -->
+        <div class="col-md-6">
+          <!-- Feedback Button -->
+          <div id="feedback-button">
+            <button class="btn btn-primary">7d 3h 5m - Añadir Feedback</button>
+          </div>
+
+          <!-- Posts -->
+          <div id="posts-list">
+            {% for post in mensajes_foro %}
+            <div class="posts-container">
+              <div class="posts-author">
+                <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
+                <p>{{ post.name }}</p>
+              </div>
+              <div class="posts-content">
+                <p>{{ post.content }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Columna derecha, resumen de la clase -->
+        <div class="col-md-3">
+          <div class="summary">
+            <h4>Resumen</h4>
+            <p>Clase introductoria, hablamos sobre lo que se vera en el curso y las evaluaciones a tener.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}
