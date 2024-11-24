@@ -1,7 +1,7 @@
 {% extends 'navbar.html' %}
     {% block title %} Foro {% endblock %}
     {% block css %}
-    <link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/home-page.css">
+    <link rel="stylesheet" type="text/css" href= "/static/feedback_app/css/home-page.css">
     {% endblock %}
     {% block content %}
     
@@ -50,24 +50,17 @@
 
           <!-- Posts -->
           <div id="posts-list">
+            {% for post in mensajes_foro %}
             <div class="posts-container">
               <div class="posts-author">
                 <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
-                <p>Gato Anonimo</p>
+                <p>{{ post.name }}</p>
               </div>
               <div class="posts-content">
-                <p>Me quedaron dudas de cuantas pruebas son.</p>
+                <p>{{ post.content }}</p>
               </div>
             </div>
-            <div class="posts-container">
-              <div class="posts-author">
-                <img src="https://images.emojiterra.com/google/android-12l/512px/1f415.png" width="50" alt="Perro">
-                <p>Perro Anonimo</p>
-              </div>
-              <div class="posts-content">
-                <p>No me gusta matemáticas...</p>
-              </div>
-            </div>
+            {% endfor %}
           </div>
         </div>
 

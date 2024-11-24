@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib import messages
 from django.template import loader
 from django.http import HttpResponse
-from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject
+from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
 
 ## Redirects empty path to login page if user is not authenticated
 ## or to home page if user is authenticated
@@ -44,16 +44,8 @@ def logout_view(request):
     auth_logout(request)
     return redirect('login')
 
-##Renders home page with all the information of the student
-@login_required
-def homepage(request, subject=None, classId=None):
-
-    # userId = request.user.id
-
-    # template = loader.get_template('home-page.html')
-
-    user = request.user
-
+##Returns the context for the navbar
+def navbar_context(user):
     context={
         'socialSubjectList':[],
         'exactSubjectList':[],
@@ -63,8 +55,6 @@ def homepage(request, subject=None, classId=None):
 
     if user.is_student:
         student_instance = user.student
-
-        # context['student'] = user.id
 
         ##Get all tuples of subjects and teachers
         tss_list = TeacherStudentSubject.objects.filter(student=student_instance).select_related(
@@ -83,16 +73,19 @@ def homepage(request, subject=None, classId=None):
             if subject.type == Subject.SOCIALES:
                 context['socialSubjectList'].append({
                     'subjectId': subject.id,
+                    'teacherId': teacher.user.id,
                     'subjectName': subject.name,
                 })
             elif subject.type == Subject.EXACTAS:
                 context['exactSubjectList'].append({
                     'subjectId': subject.id,
+                    'teacherId': teacher.user.id,
                     'subjectName': subject.name,
                 })
             elif subject.type == Subjects.COMPLEMENTARIOS:
                 context['complementarySubjectList'].append({
                     'subjectId': subject.id,
+                    'teacherId': teacher.user.id,
                     'subjectName': subject.name,
                 })
                 
@@ -127,35 +120,23 @@ def homepage(request, subject=None, classId=None):
                 'weeks': weeks
             })
 
+        return context
 
+    elif user.is_teacher:
 
-        ##Context structure:
-        #{
-        #    'subjects_info': [
-        #        {
-        #            'subject': subject_i,
-        #            'teacher': teacher_i,
-        #            'weeks': [
-        #                {
-        #                    'date': date_j,
-        #                    'resume': resume_j,
-        #                    'feedbacks': [
-        #                        {
-        #                            'date': date_k,
-        #                            'grade': grade_k,
-        #                            'content': content_k
-        #                        }
-        #                    ],
-        #                    'week_number': week_number_j
-        #                }
-        #            ]
-        #        }
-        #    ]
-        #}
+        return context
 
+##Renders home page with all the information of the student
+@login_required
+def homepage(request, subject=None, classId=None):
 
-        # return HttpResponse(template.render(context, request))
+    user = request.user
 
+    context = {}
+    
+    context['navbar'] = navbar_context(user)
+
+    if user.is_student:
         
         return render(request, 'feedback_app/home-page.html', context)
     elif user.is_teacher:
@@ -198,6 +179,77 @@ def homepage(request, subject=None, classId=None):
 
 
         return render(request, 'feedback_app/home-page.html')
+
+@login_required
+def foro(request, teacherId, subjectId):
+    user = request.user
+
+    context = {
+        'identificadores': {
+            'teacher': teacherId,
+            'subject': subjectId,
+        },
+        'mensajes_foro': [],
+    }
+    
+    context['navbar'] = navbar_context(user)
+
+    tss_list = TeacherStudentSubject.objects.filter(teacher=teacherId, subject=subjectId)
+
+    for tss in tss_list:
+        question_list = Question.objects.filter(tss=tss)
+        for question in question_list:
+            context['mensajes_foro'].append({
+                'name': tss.student.mask,
+                'content': question.content,
+            })
+
+    if user.is_student:
+
+        context['identificadores']['student'] = user.id
+        
+        return render(request, 'feedback_app/foro.html', context)
+    elif user.is_teacher:
+        ##For the moment, teacher is not implemented
+
+
+        # context={
+        #     'subjectList':[],
+        #     'subjects_info':[],
+        # }
+
+
+        # teacher_instance = Teacher.objects.get(user=user)
+
+        # context['teacher'] = user.id
+        # ##Get all tuples of subjects and teachers
+        # tss_list = TeacherStudentSubject.objects.filter(teacher=teacher_instance).select_related(
+        #     'subject', 'teacher'
+        # )
+        # for tss in tss_list:
+        #     ##Get subject and teacher
+        #     subject = tss.subject
+        #     teacher = tss.teacher
+            
+            # if subject.name in socialSubjects:
+            #     context['socialSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in exactSubjects:
+            #     context['exactSubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+            # elif subject.name in complementarySubjects:
+            #     context['complementarySubjectList'].append({
+            #         'subjectId': subject.id,
+            #         'subjectName': subject.name,
+            #     })
+
+
+        return render(request, 'feedback_app/home-page.html')
+    return render(request, 'feedback_app/home-page.html')
 
 @login_required
 def form(request, subject=None, classId=None, userId=None):
