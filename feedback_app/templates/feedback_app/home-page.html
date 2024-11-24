@@ -1,107 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Foro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-          background-color: #002b36; /* Color oscuro como el mockup */
-          color: white;
-        }
-        .navbar {
-          background-color: #073642; 
-        }
-        .navbar-nav .nav-link {
-          color: white;
-          font-size: 1.5rem;
-        }
-        .navbar-nav .nav-link:hover {
-          color: #fdf6e3;
-        }
-
-        .nav-icon {
-          width: 30px; /* Ajusta el tamaño según lo necesario */
-          height: 30px; /* Ajusta el tamaño según lo necesario */
-          vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
-          margin-right: 5px; /* Espacio entre la imagen y el texto */
-        }
-
-        .nav-tabs {
-            background-color: #073642;
-            border-bottom: none;
-        }
-        .nav-tabs .nav-link {
-            color: white; /* Color del texto */
-            font-size: 1.5rem;
-        }
-        .nav-tabs .nav-link.active {
-            background-color: #002b36; /* Color de fondo para la pestaña activa  igual al fondo de la página*/
-            color: white; /* Color del texto para la pestaña activa */
-            border-bottom: none;
-        }
-        .nav-tabs .nav-link:hover {
-            color: #fdf6e3; /* Color del texto al pasar el mouse */
-        }
-
-        .nav-tabs .nav-item {
-            margin-right: 5px; /* Espacio entre las pestañas */
-        }
-
-
-        #feedback-button {
-          margin-top: 10px;
-          text-align: center;
-        }
-        .posts-container {
-          background-color: #073642;
-          border-radius: 8px;
-          margin: 15px;
-          padding: 15px;
-        }
-        .posts-author {
-          display: flex;
-          align-items: center;
-          margin-bottom: 10px;
-        }
-        .posts-author img {
-          border-radius: 50%;
-          margin-right: 10px;
-        }
-        .posts-content {
-          background-color: #002b36;
-          border: 1px solid #586e75;
-          padding: 10px;
-          border-radius: 5px;
-        }
-        .class-list {
-          background-color: #073642;
-          border-radius: 8px;
-          padding: 10px;
-        }
-        .class-list .list-group-item {
-          background-color: transparent;
-          color: #93a1a1;
-          border: none;
-        }
-        .class-list .list-group-item.active {
-          background-color: #268bd2;
-          color: white;
-          font-weight: bold;
-        }
-        .dropdown:hover .dropdown-menu {
-          display: block;
-          margin-top: 0;
-        }
-        .dropdown-menu .dropdown-item {
-          min-width: 100px;
-          max-width: 250px;
-          white-space: normal;
-        }
-      </style>
-  </head>
-  <body>
+{% extends 'navbar.html' %}
+    {% block title %} Foro {% endblock %}
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/home-page.css">
+    {% endblock %}
+    {% block content %}
+    
 
     <!---- La navbar de la pagina--> 
     <!-- <nav class="navbar navbar-expand-lg">
@@ -114,104 +17,24 @@
         </div>
       </div>
     </nav> -->
-    
+    <div id="personalInfoContainer" class="personalInfoContainer">
+      <h1>{{user.first_name}} {{user.last_name}}</h1> <br>
+      <p>Correo: {{user.email}}</p> <br>
+      <p>Fecha de ingreso: {{date_joined}}</p> <br>
+      <p>...</p> <br>
+    </div>
 
-    <ul class="nav nav-tabs">
-      <li class="nav-item dropdown">
-        <a 
-          class="nav-link dropdown-toggle d-flex align-items-center" 
-          href="#" 
-          id="socialScience" 
-          role="button" 
-          data-bs-toggle="dropdown" 
-          aria-expanded="false">
-          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/6747/6747138.png">
-          Ciencias Sociales
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="principalsClasses">
-          <li><a class="dropdown-item d-flex align-items-center" href="#Lenguaje">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7416/7416864.png">
-            Lengua y Literatura
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Historia">
-            <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
-            Historia, Geografía y Ciencias Sociales
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Inglés">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/4710/4710672.png">
-            Inglés
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Artes">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/2361/2361557.png">
-            Artes Visuales
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Música">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/2753/2753286.png">
-            Música
-          </a></li>
-        </ul>
-      </li>
+    {% if student %}
 
-      <li class="nav-item dropdown">
-        <a 
-          class="nav-link dropdown-toggle d-flex align-items-center" 
-          href="#" 
-          id="exactScience" 
-          role="button" 
-          data-bs-toggle="dropdown" 
-          aria-expanded="false">
-          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8419/8419106.png">
-          Ciencias Exactas
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="exactScience">
-          <li><a class="dropdown-item d-flex align-items-center" href="#Matemáticas">
-            <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
-            Matemáticas
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Física">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
-            Física
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Biología">
-            <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
-            Biología
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Química">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
-            Química
-          </a></li>
-        </ul>
-      </li>
-      <li class="nav-item dropdown">
-        <a 
-          class="nav-link dropdown-toggle d-flex align-items-center" 
-          href="#" 
-          id="complementary" 
-          role="button" 
-          data-bs-toggle="dropdown" 
-          aria-expanded="false">
-          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8324/8324364.png">
-          Complementarios
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="complementary">
-          <li><a class="dropdown-item d-flex align-items-center" href="#EducaciónFísica">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/5388/5388915.png">
-            Educación Física y Salud
-          </a></li>
-          <li><a class="dropdown-item d-flex align-items-center" href="#Tecnología">
-            <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7017/7017556.png">
-            Tecnología
-          </a></li>
-        </ul>
-      </li>
-    
-      <li class="nav-item ms-auto">
-        <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}">
-          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
-          Salir
-        </a>
-      </li>
-    </ul>
+
+
+    {% elif teacher %}
+
+
+    {% else %}
+
+
+    {% endif %}
 
 
     <!-- ------------------------------------------------------------ -->
@@ -309,7 +132,4 @@
       </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
+    {% endblock %}

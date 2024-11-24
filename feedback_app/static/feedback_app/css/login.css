@@ -1,0 +1,95 @@
+/* body{
+    background-color: rgb(21, 110, 111);
+    background-image: url('https://humanidades.ing.uchile.cl/images/edificio.jpg');
+    }
+    div.loginContainer {
+    width:34%;                
+    height: 38%;              
+    padding: 10px;              
+    margin-top: 10%;  
+    margin-left: 56%;
+    text-align: center;                   
+    align-items: center;        
+    justify-content: center;     
+    background-color: gray;
+    border-radius: 30px; 
+    } */
+
+    body {
+        background-color: #002b36; /* Color oscuro como en el primer bloque */
+        background-image: url('https://humanidades.ing.uchile.cl/images/edificio.jpg'); /* Imagen de fondo */
+        color: white; /* Establecer el color de texto como blanco */
+        margin: 0; /* Eliminar márgenes por defecto */
+        font-family: Arial, sans-serif; /* Establecer una fuente general */
+    }
+    
+    div.loginContainer {
+        width: 34%;
+        height: 38%;
+        padding: 20px; /* Mayor padding para un espacio más cómodo */
+        margin-top: 10%; /* Centrar el contenedor verticalmente */
+        margin-left: 33%; /* Centrar el contenedor horizontalmente */
+        text-align: center;
+        background-color: rgba(7, 54, 66, 0.8); /* Fondo transparente oscuro, similar al color de la sección de posts */
+        border-radius: 30px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 1); /* Sombra oscura */
+        backdrop-filter: blur(10px); /* Para dar un efecto de difuminado en el fondo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column; 
+    }
+    
+    div.loginContainer input {
+        width: 80%; /* Ancho de los campos de entrada */
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #586e75; /* Color del borde similar al de los posts */
+        background-color: #002b36; /* Fondo oscuro para los inputs */
+        color: white; /* Texto blanco en los inputs */
+        border-radius: 5px;
+    }
+    
+
+    div.loginContainer button {
+        padding: 12px 25px; /* Aumento del padding para un botón más grande */
+        background-color: #268bd2; /* Color azul para el fondo del botón */
+        color: white;
+        border: none;
+        border-radius: 25px; /* Bordes redondeados más pronunciados */
+        font-weight: bold;
+        font-size: 16px; /* Tamaño de fuente más grande */
+        cursor: pointer;
+        width: 85%; /* Ancho mayor para que ocupe la mayoría del espacio */
+        transition: all 0.3s ease; /* Animación suave */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el botón */
+    }
+    
+    div.loginContainer button:hover {
+        background-color: #1c6d8c; /* Color ligeramente más oscuro en hover */
+        transform: translateY(-3px); /* Elevar el botón al pasar el mouse */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada al hacer hover */
+    }
+    
+    div.loginContainer button:active {
+        transform: translateY(1px); /* Efecto de presionar el botón */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera cuando el botón está presionado */
+    }
+
+    /* Botón "Ayuda con la contraseña" - Enlace estilizado */
+    div.loginContainer input[type="button"] {
+        background-color: transparent;
+        color: #93a1a1; /* Color gris suave */
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: underline;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+    }
+
+    div.loginContainer input[type="button"]:hover {
+        color: #268bd2; /* Cambia el color al pasar el mouse */
+        text-decoration: none; /* Quitar el subrayado al pasar el mouse */
+    }
+        
