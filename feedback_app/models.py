@@ -42,10 +42,33 @@ class Teacher(models.Model):
 
 '''Clase que representa a una asignatura
 
-Se ocupa para guardar cada asigatura, estas tienen un curso asignado, un nombre y un id.
+Se ocupa para guardar cada asigatura, estas tienen un curso asignado, un nombre, el curso, el tipo de asignatura y el id.
 '''
 class Subject(models.Model):
+    I = 1
+    II = 2
+    III = 3
+    IV = 4
+    SOCIALES = 1
+    EXACTAS = 2
+    COMPLEMENTARIOS = 3
+
+    LEVELS = (
+        (I, 'primero'),
+        (II, 'segundo'),
+        (III, 'tercero'),
+        (IV, 'cuarto')
+    )
+
+    TYPES = (
+        (SOCIALES, 'Ciencias Sociales'),
+        (EXACTAS, 'Ciencias Exactas'),
+        (COMPLEMENTARIOS, 'Complementarios')
+    )
+
     name = models.CharField(max_length=100)
+    level = models.PositiveSmallIntegerField(choices=LEVELS)
+    type = models.PositiveSmallIntegerField(choices=TYPES)
 
 '''Clase que almacena resumenes de distintas asignaturas
 
