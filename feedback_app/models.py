@@ -1,6 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+''' Clase que extiende de abstract user
+
+Se ocupa para definir un usuario custom que se usa en la aplicacion, agrega caracterizacion entre los tipos de usuarios de la aplicacion.
+'''
 class User(AbstractUser):
 
     STUDENT = 1
@@ -20,16 +24,33 @@ class User(AbstractUser):
     def is_teacher(self):
         return self.role == self.TEACHER
 
+''' Clase que representa a un estudiante
+
+Se ocupa para representar los datos guardados de un estudiante, esta relacionado con la clase usuario.
+'''
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     mask = models.CharField(max_length=100)
 
+''' Clase que representa a un profesor
+
+Se ocupa para representar los datos de un profesor, esta esta relacionada con la clase de usuario.
+'''
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
+
+'''Clase que representa a una asignatura
+
+Se ocupa para guardar cada asigatura, estas tienen un curso asignado, un nombre y un id.
+'''
 class Subject(models.Model):
     name = models.CharField(max_length=100)
 
+'''Clase que almacena resumenes de distintas asignaturas
+
+Se ocupa principalmente para almacenar los resumenes periodicos de las asignaturas publicados por los profesores.
+'''
 class SubjectResume(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -42,6 +63,10 @@ class SubjectResume(models.Model):
         )
 
 
+''' Tritupla entre profesor, estudiante y asignatura
+
+Esta tritupla sirve para poder hacer checkeos sobre los feedbacks.
+'''
 class TeacherStudentSubject(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -52,6 +77,11 @@ class TeacherStudentSubject(models.Model):
             models.UniqueConstraint(fields=("teacher", "student", "subject"), name='unique_teacher_student_subject'),
         )
 
+
+''' Clase que representa a un feedback
+
+Se ocupa para poder almacenar la informacion de un feedback, con nota.
+'''
 class Feedback(models.Model):
     tss = models.ForeignKey(TeacherStudentSubject, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
@@ -63,6 +93,10 @@ class Feedback(models.Model):
             models.UniqueConstraint(fields=("tss", "date"), name='unique_tss_date'),
         )
 
+''' Clase que representa una pregunta
+
+Se ocupa para poder almacenar las preguntas realizadas por los estudiantes.
+'''
 class Question(models.Model):
     tss = models.ForeignKey(TeacherStudentSubject, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
