@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib import messages
 from django.template import loader
 from django.http import HttpResponse
-from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback
+from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject
 
 ## Redirects empty path to login page if user is not authenticated
 ## or to home page if user is authenticated
@@ -48,33 +48,21 @@ def logout_view(request):
 @login_required
 def homepage(request, subject=None, classId=None):
 
-    socialSubjects = ["Lengua y Literatura", "Historia, Geografía y Ciencias Sociales", "Inglés", "Artes Visuales", "Música", ]
-    exactSubjects = ["Matemáticas", "Física", "Biología", "Química", ]
-    complementarySubjects = ["Educación Física y Salud", "Tecnología", ]
     # userId = request.user.id
 
     # template = loader.get_template('home-page.html')
 
     user = request.user
 
-    # context={
-    #         'socialSubjectList':[],
-    #         'exactSubjectList':[],
-    #         'complementarySubjectList':[],
-    #         'subjects_info':[],
-    #     }
+    context={
+        'socialSubjectList':[],
+        'exactSubjectList':[],
+        'complementarySubjectList':[],
+        'subjects_info':[],
+    }
 
     if user.is_student:
-        # try: 
-        #     student_instance = Student.objects.get(user_id=userId)
-        # except Student.DoesNotExist:
-        #     student_instance = None
-
-
-        
-
-
-        student_instance = Student.objects.get(user=user)
+        student_instance = user.student
 
         # context['student'] = user.id
 
@@ -92,21 +80,21 @@ def homepage(request, subject=None, classId=None):
             subject = tss.subject
             teacher = tss.teacher
             
-            # if subject.name in socialSubjects:
-            #     context['socialSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in exactSubjects:
-            #     context['exactSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in complementarySubjects:
-            #     context['complementarySubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
+            if subject.type == Subject.SOCIALES:
+                context['socialSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subject.EXACTAS:
+                context['exactSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subjects.COMPLEMENTARIOS:
+                context['complementarySubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
                 
             ##Get weekly information
             resumes = SubjectResume.objects.filter(subject=subject).select_related(
@@ -133,23 +121,13 @@ def homepage(request, subject=None, classId=None):
                     'week_number': week_number
                 })
 
-            # context['subjects_info'].append({
-            #     'subject': subject,
-            #     'teacher': teacher,
-            #     'weeks': weeks
-            # })
-
-            subjects_info.append({
+            context['subjects_info'].append({
                 'subject': subject,
                 'teacher': teacher,
                 'weeks': weeks
             })
 
-        ##Context info for frontend
-        
-        context = {
-            'subjects_info': subjects_info
-        }
+
 
         ##Context structure:
         #{
