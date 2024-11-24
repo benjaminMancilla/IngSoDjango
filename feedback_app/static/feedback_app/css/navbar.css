@@ -1,0 +1,42 @@
+body {
+        background-color: #002b36; /* Color oscuro como el mockup */
+        color: white;
+      }
+      .navbar {
+        background-color: #073642; 
+      }
+      .navbar-nav .nav-link {
+        color: white;
+        font-size: 1.5rem;
+      }
+      .navbar-nav .nav-link:hover {
+        color: #fdf6e3;
+      }
+
+      .nav-icon {
+        width: 30px; /* Ajusta el tamaño según lo necesario */
+        height: 30px; /* Ajusta el tamaño según lo necesario */
+        vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+        margin-right: 5px; /* Espacio entre la imagen y el texto */
+      }
+
+      .nav-tabs {
+          background-color: #073642;
+          border-bottom: none;
+      }
+      .nav-tabs .nav-link {
+          color: white; /* Color del texto */
+          font-size: 1.5rem;
+      }
+      .nav-tabs .nav-link.active {
+          background-color: #002b36; /* Color de fondo para la pestaña activa  igual al fondo de la página*/
+          color: white; /* Color del texto para la pestaña activa */
+          border-bottom: none;
+      }
+      .nav-tabs .nav-link:hover {
+          color: #fdf6e3; /* Color del texto al pasar el mouse */
+      }
+
+      .nav-tabs .nav-item {
+          margin-right: 5px; /* Espacio entre las pestañas */
+      }

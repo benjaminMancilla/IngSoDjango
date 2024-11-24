@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block cssNavbar %}
+<link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/navbar.css">
+{% endblock %}
+{% block nabvar %}
+<ul class="nav nav-tabs">
+    <li class="nav-item dropdown">
+      <a 
+        class="nav-link dropdown-toggle d-flex align-items-center" 
+        href="#" 
+        id="socialScience" 
+        role="button" 
+        data-bs-toggle="dropdown" 
+        aria-expanded="false">
+        <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/6747/6747138.png">
+        Ciencias Sociales
+      </a>
+      
+      <ul class="dropdown-menu" aria-labelledby="principalsClasses">
+
+        {% for subject in socialSubjectList %}
+        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7416/7416864.png">
+          {{subject.subjectName}}
+        </a></li>
+        {% endfor %}
+        <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Historia">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2234/2234770.png">
+          Historia, Geografía y Ciencias Sociales
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="#Inglés">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/4710/4710672.png">
+          Inglés
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="#Artes">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/2361/2361557.png">
+          Artes Visuales
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="#Música">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/2753/2753286.png">
+          Música
+        </a></li> -->
+      </ul>
+    </li>
+
+    <li class="nav-item dropdown">
+      <a 
+        class="nav-link dropdown-toggle d-flex align-items-center" 
+        href="#" 
+        id="exactScience" 
+        role="button" 
+        data-bs-toggle="dropdown" 
+        aria-expanded="false">
+        <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8419/8419106.png">
+        Ciencias Exactas
+      </a>
+
+      <ul class="dropdown-menu" aria-labelledby="exactScience">
+
+        {% for subject in exactSubjectList %}
+        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/2503/2503374.png">
+          {{subject.subjectName}}
+        </a></li>
+        {% endfor %}
+        <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Física">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728400.png">
+          Física
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="#Biología">
+          <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/1728/1728344.png">
+          Biología
+        </a></li>
+        <li><a class="dropdown-item d-flex align-items-center" href="#Química">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/1728/1728358.png">
+          Química
+        </a></li> -->
+      </ul>
+    </li>
+    <li class="nav-item dropdown">
+      <a 
+        class="nav-link dropdown-toggle d-flex align-items-center" 
+        href="#" 
+        id="complementary" 
+        role="button" 
+        data-bs-toggle="dropdown" 
+        aria-expanded="false">
+        <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/8324/8324364.png">
+        Complementarios
+      </a>
+
+      <ul class="dropdown-menu" aria-labelledby="complementary">
+
+        {% for subject in complementarySubjectList %}
+        <li><a class="dropdown-item d-flex align-items-center" href="home-page/{{subject.subjectName}}/{{subject.subjectId}}">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/5388/5388915.png">
+          {{subject.subjectName}}
+        </a></li>
+        {% endfor %}
+
+        <!-- <li><a class="dropdown-item d-flex align-items-center" href="#Tecnología">
+          <img class="nav-icon" src="https://cdn-icons-png.flaticon.com/512/7017/7017556.png">
+          Tecnología
+        </a></li> -->
+
+      </ul>
+    </li>
+  
+    <li class="nav-item ms-auto">
+      <a class="nav-link d-flex align-items-center" href="{% url 'logout' %}">
+        <img class="nav-icon" src="https://cdn-icons-png.freepik.com/512/980/980403.png">
+        Salir
+      </a>
+    </li>
+</ul>
+{% endblock %}
+
