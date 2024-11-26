@@ -118,13 +118,20 @@ def navbar_context(user):
                 feedbacks = Feedback.objects.filter(tss=tss, date__week=week_number).select_related(
                     'tss__teacher__user',
                     'tss__student__user').order_by('date')
+                
+                #Get Timer for feedback deadline
+                deadline, is_closed = calculate_deadline(resume.date)
 
                 ##Add resume, feedbacks and week number to the weeks list
                 weeks.append({
                     'date': resume.date,
                     'resume': resume.resume,
                     'feedbacks': feedbacks,
-                    'week_number': week_number
+                    'week_number': week_number,
+                    'timer': {
+                        'deadline': deadline,
+                        'is_closed': is_closed,
+                    }
                 })
 
             context['subjects_info'].append({
