@@ -153,6 +153,83 @@ def navbar_context(user):
         return context
 
     elif user.is_teacher:
+        teacher_instance = user.teacher
+
+        # Subjects that the teacher teaches
+        subjects = Subject.objects.filter(
+            teacherstudentsubject__teacher=teacher_instance
+        ).distinct()
+
+        # Subject information
+        subjects_info = []
+
+        for subject in subjects:
+            # Filter the subjects by type
+            if subject.type == Subject.SOCIALES:
+                context['socialSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subject.EXACTAS:
+                context['exactSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subject.COMPLEMENTARIOS:
+                context['complementarySubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+
+            # Get the resumes of the subject (all weeks)
+            resumes = SubjectResume.objects.filter(
+                subject=subject,
+                teacher=teacher_instance
+            ).order_by('date')
+
+            # Create weekly information
+            weeks = []
+
+            for resume in resumes:
+                # Week number
+                week_number = resume.date.isocalendar()[1]
+
+                # Week feedbacks
+                feedbacks = Feedback.objects.filter(
+                    tss__subject=subject,
+                    tss__teacher=teacher_instance,
+                    date__week=week_number
+                ).select_related(
+                    'tss__student__user',
+                    'tss__teacher__user'
+                ).order_by('date')
+
+                # Get deadline and check if it is closed
+                deadline, is_closed = calculate_deadline(resume.date)
+
+                weeks.append({
+                    'date': resume.date,
+                    'resume': resume.resume,
+                    'feedbacks': feedbacks,
+                    'week_number': week_number,
+                    'timer': {
+                        'deadline': deadline,
+                        'is_closed': is_closed,
+                    }
+                })
+
+            subjects_info.append({
+                'subject': subject,
+                'teacher': teacher_instance,
+                'weeks': weeks
+            })
+
+        context['subjects_info'] = subjects_info
+
+        return context
+
+    else:
+        # Context Vacio para el default
 
         return context
 
@@ -163,51 +240,16 @@ def homepage(request, subject=None, classId=None):
     user = request.user
 
     context = {}
-    
+    ## Get the context for the navbar depending on the user
     context['navbar'] = navbar_context(user)
 
     if user.is_student:
-        
         return render(request, 'feedback_app/home-page.html', context)
+    
     elif user.is_teacher:
-        ##For the moment, teacher is not implemented
-
-
-        # context={
-        #     'subjectList':[],
-        #     'subjects_info':[],
-        # }
-
-
-        # teacher_instance = Teacher.objects.get(user=user)
-
-        # context['teacher'] = user.id
-        # ##Get all tuples of subjects and teachers
-        # tss_list = TeacherStudentSubject.objects.filter(teacher=teacher_instance).select_related(
-        #     'subject', 'teacher'
-        # )
-        # for tss in tss_list:
-        #     ##Get subject and teacher
-        #     subject = tss.subject
-        #     teacher = tss.teacher
-            
-            # if subject.name in socialSubjects:
-            #     context['socialSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in exactSubjects:
-            #     context['exactSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in complementarySubjects:
-            #     context['complementarySubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-
-
+        return render(request, 'feedback_app/home-page.html', context)
+    
+    else:
         return render(request, 'feedback_app/home-page.html')
 
 @login_required
