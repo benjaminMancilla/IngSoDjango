@@ -3,6 +3,10 @@ body {
     color: white;
   }
 
+h3 {
+    margin-bottom: 20px;
+  }
+
   #feedback-button {
     margin-top: 10px;
     text-align: center;
@@ -63,3 +67,26 @@ body {
     z-index: 9999; 
     border-radius: 10px;
   }
+
+.card-header {
+  background-color: #276baf;
+  color: #fff;
+}
+
+.countdown {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.progress-bar {
+  background-color: #28a745;
+}
+
+.progress-bar.bg-danger {
+  background-color: #dc3545;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
