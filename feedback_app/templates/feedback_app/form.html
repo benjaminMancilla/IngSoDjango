@@ -7,7 +7,7 @@
 
 
     <div id="mainContainer" class="container-sm mt-4">
-        <h1>Formulario de Retroalimentación  de ______ </h1>
+        <h1>Formulario de Retroalimentación  de {{ usernameTeacher }} </h1>
         <div id="notificationBox" hidden>
             <h2 id="notificationMsg">.</h2>
             <ul id="notificationList"></ul>
@@ -18,7 +18,7 @@
                     <div class="col-md-8">
                         <div class="mb-3">
                             <br>
-                            <p class="form-label">¿Se siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
+                            <p class="form-label">¿Se siente satisfecho/a/e con la(s) clase(s) de {{ usernameTeacher }} que tuvo en la semana? (Obligatorio): </p>
                             <!-- <form> -->
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="calification1" name="classCalification" value="1" class="form-check-input" required>
