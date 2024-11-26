@@ -5,6 +5,19 @@ from django.contrib import messages
 from django.template import loader
 from django.http import HttpResponse
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
+from datetime import timedelta
+from django.utils.timezone import now
+
+def calculate_deadline(start_date):
+    """
+    Calcula el plazo (deadline) y verifica si ya está cerrado.
+    """
+    deadline = start_date + timedelta(days=7)
+    deadline = deadline.replace(hour=23, minute=59, second=59)
+    is_closed = deadline < now()
+    return deadline, is_closed
+
+
 
 ## Redirects empty path to login page if user is not authenticated
 ## or to home page if user is authenticated
@@ -82,7 +95,7 @@ def navbar_context(user):
                     'teacherId': teacher.user.id,
                     'subjectName': subject.name,
                 })
-            elif subject.type == Subjects.COMPLEMENTARIOS:
+            elif subject.type == Subject.COMPLEMENTARIOS:
                 context['complementarySubjectList'].append({
                     'subjectId': subject.id,
                     'teacherId': teacher.user.id,
