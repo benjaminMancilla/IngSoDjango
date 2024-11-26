@@ -5,16 +5,26 @@ from django.contrib import messages
 from django.template import loader
 from django.http import HttpResponse
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
-from datetime import timedelta
-from django.utils.timezone import now
+from datetime import timedelta, datetime
 
 def calculate_deadline(start_date):
     """
     Calcula el plazo (deadline) y verifica si ya está cerrado.
     """
-    deadline = start_date + timedelta(days=7)
-    deadline = deadline.replace(hour=23, minute=59, second=59)
-    is_closed = deadline < now()
+    # Crear un objeto datetime directamente con la fecha y hora
+    deadline = datetime(
+        year=start_date.year,
+        month=start_date.month,
+        day=start_date.day,
+        hour=23,
+        minute=59,
+        second=59
+    ) + timedelta(days=6)
+    
+    # Comparar con el datetime actual (sin zonas horarias)
+    current_time = datetime.now()
+    is_closed = deadline < current_time
+
     return deadline, is_closed
 
 
