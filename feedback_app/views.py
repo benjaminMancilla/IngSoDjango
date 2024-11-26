@@ -190,6 +190,9 @@ def navbar_context(user):
             # Create weekly information
             weeks = []
 
+            # Subject average grade
+            subject_grades = []
+
             for resume in resumes:
                 # Week number
                 week_number = resume.date.isocalendar()[1]
@@ -204,6 +207,19 @@ def navbar_context(user):
                     'tss__teacher__user'
                 ).order_by('date')
 
+                #Obtain the average grade of the week
+                grades = feedbacks.values_list('grade', flat=True)
+                grades_list = list(grades)
+
+                #Calculate the average grade of the week
+                if grades_list:
+                    week_avg_grade = sum(grades_list) / len(grades_list)
+                else:
+                    week_avg_grade = 7.0
+
+                #Add grades to the subject grades list
+                subject_grades.extend(grades_list)
+
                 # Get deadline and check if it is closed
                 deadline, is_closed = calculate_deadline(resume.date)
 
@@ -212,16 +228,24 @@ def navbar_context(user):
                     'resume': resume.resume,
                     'feedbacks': feedbacks,
                     'week_number': week_number,
+                    'week_avg_grade': week_avg_grade,
                     'timer': {
                         'deadline': deadline,
                         'is_closed': is_closed,
                     }
                 })
 
+            # Calculate the average grade of the subject
+            if subject_grades:
+                subject_avg_grade = sum(subject_grades) / len(subject_grades)
+            else:
+                subject_avg_grade = 7.0
+
             subjects_info.append({
                 'subject': subject,
                 'teacher': teacher_instance,
-                'weeks': weeks
+                'weeks': weeks,
+                'subject_avg_grade': subject_avg_grade
             })
 
         context['subjects_info'] = subjects_info
