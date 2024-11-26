@@ -253,4 +253,20 @@ def foro(request, teacherId, subjectId):
 
 @login_required
 def form(request, subject=None, classId=None, userId=None):
-    return render(request, 'feedback_app/form.html')
+    if request.method == 'GET':
+        teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
+        teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
+
+        # Debería accerder al nombre completo, pero por ahora solo tengo el username
+        usernameTeacher = teacher.user.username
+        studentId = request.GET.get('student')
+        subjectId = request.GET.get('subject')
+
+        context={
+            'usernameTeacher' : usernameTeacher, # Probablemente también tenga que mandar la clase y el estudiante en POST
+        }
+        return render(request, 'feedback_app/form.html', context)
+    
+    if request.method == 'POST': # lógica de mandar form
+        #...
+        return render(request, 'feedback_app/form.html', context)
