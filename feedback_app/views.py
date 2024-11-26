@@ -260,21 +260,22 @@ def navbar_context(user):
 ##Renders home page with all the information of the student
 @login_required
 def homepage(request, subject=None, classId=None):
-
     user = request.user
-
     context = {}
+
     ## Get the context for the navbar depending on the user
     context['navbar'] = navbar_context(user)
 
+    # Add role to the context
     if user.is_student:
-        return render(request, 'feedback_app/home-page.html', context)
-    
+        context['role'] = 'student'
     elif user.is_teacher:
-        return render(request, 'feedback_app/home-page.html', context)
-    
+        context['role'] = 'teacher'
     else:
-        return render(request, 'feedback_app/home-page.html')
+        context['role'] = 'unknown'
+
+    # Render the home page
+    return render(request, 'feedback_app/home-page.html', context)
 
 @login_required
 def foro(request, teacherId, subjectId):
