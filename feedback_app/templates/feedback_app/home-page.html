@@ -13,13 +13,46 @@
 </div>
 
 <div class="container mt-4">
+  <!-- Debug -->
+  <pre>{{ navbar }}</pre>
   <div class="row">
-    <!-- Contenedor principal de timers -->
-    <div class="col-md-12">
-      <h3>Tareas recientes</h3>
-      {% include 'timer.html' %}
-    </div>
+
+    {% if role == 'student' %}
+      <div class="col-md-12">
+        <h3>Tareas recientes</h3>
+        {% include 'timer.html' %}
+      </div>
+
+    {% elif role == 'teacher' %}
+      <div class="col-md-12">
+        <h3>Asignaturas que impartes</h3>
+        <ul>
+          {% for subject_info in navbar.subjects_info %}
+            <li>
+              <h4>{{ subject_info.subject.name }}</h4>
+              <p>Promedio General: {{ subject_info.subject_avg_grade|default:"N/A" }}</p>
+              <ul>
+                {% for week in subject_info.weeks %}
+                  <li>
+                    Semana {{ week.week_number }}:
+                    Promedio: {{ week.week_avg_grade|default:"N/A" }}<br>
+                    Fecha límite: {{ week.timer.deadline|date:"d/m/Y" }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    {% else %}
+      <div class="col-md-12">
+        <h3>Usuario desconocido</h3>
+        <p>No se encontró información relevante para este usuario.</p>
+      </div>
+    {% endif %}
   </div>
 </div>
 
 {% endblock %}
+
