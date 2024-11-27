@@ -27,7 +27,7 @@
     <div id="teacher-dashboard">
 
       <div id="teacher-greeting" class="mb-4">
-        <h2>Bienvenido, {{ user.username }}</h2>
+        <h2>Bienvenid@, {{ user.username }}</h2>
         <p>Aquí puedes revisar el desempeño de tus cursos y gestionar las semanas.</p>
       </div>
     
@@ -75,11 +75,13 @@
             <h4>{{ feedback.subject.name }}</h4>
             <p><strong>Estudiantes:</strong> {{ feedback.students_count }}</p>
             <p><strong>Feedbacks recibidos la semana pasada:</strong> {{ feedback.last_week_feedback_count }}</p>
-            <button class="btn btn-primary mt-2">Añadir semana</button>
+            <!-- Botón "Ir a curso" -->
+            <a href="/foro/{{ user.id }}/{{ feedback.subject.id }}/" class="btn btn-primary mt-2">Ir a curso</a>
           </div>
           {% endfor %}
         </div>
       </div>
+      
     </div>
     
     {% else %}

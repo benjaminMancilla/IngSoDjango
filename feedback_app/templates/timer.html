@@ -38,9 +38,11 @@
                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                   </div>
                 </div>
-                <button class="btn btn-primary">
+                <!-- Botón "Ir a semana" -->
+                <a href="/foro/{{ subject_info.teacher.user.id }}/{{ subject_info.subject.id }}/{{ week.week_number }}" 
+                   class="btn btn-primary">
                   Ir a semana
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -51,4 +53,5 @@
 </div>
 
 <script src="{% static 'feedback_app/js/countDown.js' %}"></script>
+
 
