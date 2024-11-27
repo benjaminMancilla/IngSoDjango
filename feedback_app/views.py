@@ -118,8 +118,6 @@ def navbar_context(user):
             resumes = SubjectResume.objects.filter(subject=subject, teacher=teacher).select_related(
                 'teacher', 'subject').order_by('date')
             
-            print(resumes)
-
             ##List of weekly information of the subject
             weeks = []
             for resume in resumes:
@@ -275,6 +273,7 @@ def homepage(request, subject=None, classId=None):
 
     if user.is_teacher:
         context['role'] = 'teacher'
+        teacher_instance = user.teacher
         # Data for the grade graph
         graph_data = []
         graph_summary = []
@@ -287,7 +286,7 @@ def homepage(request, subject=None, classId=None):
             weekly_averages = [
                 {
                     'week': week['week_number'],
-                    'avg_grade': week['week_avg_grade'] or 0  # Manejar semanas sin promedio
+                    'avg_grade': week['week_avg_grade'] or 0
                 }
                 for week in subject_info['weeks']
             ]
@@ -296,21 +295,19 @@ def homepage(request, subject=None, classId=None):
                 'weekly_averages': weekly_averages
             })
 
-        # Serialize the data to JSON
-        context['graph_data'] = mark_safe(json.dumps(graph_data))
-        print(context['graph_data'])
-
-        # Average grade of the teacher
-
+        
         # Extra data for the feedbacks
         subjects_feedback = []
         for subject_info in context['navbar']['subjects_info']:
             subject = subject_info['subject']
-            students_count = TeacherStudentSubject.objects.filter(subject=subject).count()  # Obtén el número de estudiantes
+            students_count = TeacherStudentSubject.objects.filter(subject=subject, teacher=teacher_instance).count()
 
-            last_week_feedback_count = sum(
-                len(week['feedbacks']) for week in subject_info['weeks'][-1:]
-            )
+            last_week_feedback_count = 0
+            if subject_info['weeks']:                    
+                last_week_feedback_count = sum(
+                    len(week['feedbacks']) for week in subject_info['weeks'][-1:]
+                )
+
             subjects_feedback.append({
                 'subject': subject,
                 'students_count': students_count,
@@ -318,7 +315,12 @@ def homepage(request, subject=None, classId=None):
             })
 
             # Average grade of the subject
-            subject_avg = sum(week['week_avg_grade'] for week in subject_info['weeks']) / len(subject_info['weeks'])
+            subject_avg = 0
+            if subject_info['weeks']:
+                subject_avg = sum(
+                    week['week_avg_grade'] for week in subject_info['weeks']
+                ) / len(subject_info['weeks'])
+                
             total_avg += subject_avg
 
             # Count Feedbacks and expected feedbacks
@@ -336,6 +338,10 @@ def homepage(request, subject=None, classId=None):
             })
 
         overall_avg = round(total_avg / max(len(context['navbar']['subjects_info']), 1), 2)
+
+
+        # Serialize the data to JSON
+        context['graph_data'] = mark_safe(json.dumps(graph_data))
 
         context['subjects_feedback'] = subjects_feedback
         context['graph_summary'] = graph_summary

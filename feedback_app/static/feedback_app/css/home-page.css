@@ -151,7 +151,7 @@ h3 {
   padding: 1rem;
   background-color: #073642;
   border-radius: 8px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem !important;
 }
 
 #teacher-graph {
