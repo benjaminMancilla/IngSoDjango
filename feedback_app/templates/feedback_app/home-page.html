@@ -13,8 +13,6 @@
 </div>
 
 <div class="container mt-4">
-  <!-- Debug -->
-  <pre>{{ navbar }}</pre>
   <div class="row">
 
     {% if role == 'student' %}
@@ -24,35 +22,111 @@
       </div>
 
     {% elif role == 'teacher' %}
-      <div class="col-md-12">
-        <h3>Asignaturas que impartes</h3>
-        <ul>
-          {% for subject_info in navbar.subjects_info %}
-            <li>
-              <h4>{{ subject_info.subject.name }}</h4>
-              <p>Promedio General: {{ subject_info.subject_avg_grade|default:"N/A" }}</p>
-              <ul>
-                {% for week in subject_info.weeks %}
-                  <li>
-                    Semana {{ week.week_number }}:
-                    Promedio: {{ week.week_avg_grade|default:"N/A" }}<br>
-                    Fecha límite: {{ week.timer.deadline|date:"d/m/Y" }}
-                  </li>
-                {% endfor %}
-              </ul>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
+    <div id="teacher-dashboard">
 
+      <div id="teacher-greeting" class="mb-4">
+        <h2>Bienvenido, {{ user.username }}</h2>
+        <p>Aquí puedes revisar el desempeño de tus cursos y gestionar las semanas.</p>
+      </div>
+    
+      <div id="teacher-graph" class="mb-5">
+        <h3>Promedios Semanales de Todos los Cursos</h3>
+        <canvas id="coursesGraph" class="small-graph"></canvas>
+      </div>
+    
+      <div id="subjects-feedback">
+        <h3>Asignaturas y Feedbacks</h3>
+        <div class="subjects-container">
+          {% for feedback in subjects_feedback %}
+          <div class="subject-box">
+            <h4>{{ feedback.subject.name }}</h4>
+            <p><strong>Estudiantes:</strong> {{ feedback.students_count }}</p>
+            <p><strong>Feedbacks recibidos la semana pasada:</strong> {{ feedback.last_week_feedback_count }}</p>
+            <button class="btn btn-primary mt-2">Añadir semana</button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
     {% else %}
       <div class="col-md-12">
         <h3>Usuario desconocido</h3>
         <p>No se encontró información relevante para este usuario.</p>
       </div>
     {% endif %}
+
   </div>
 </div>
 
 {% endblock %}
+
+{% block javascript %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const graphData = {{ graph_data|safe }};
+
+  const ctx = document.getElementById('coursesGraph').getContext('2d');
+
+  // Filtrar los cursos con datos en weekly_averages
+  const datasets = graphData
+    .filter(course => course.weekly_averages.length > 0)
+    .map((course, index) => ({
+      label: course.subject,
+      data: course.weekly_averages.map(data => ({ x: data.week, y: data.avg_grade })),
+      borderColor: `hsl(${index * 360 / graphData.length}, 70%, 50%)`,
+      tension: 0.4,
+      fill: false
+    }));
+
+  if (datasets.length > 0) {
+    new Chart(ctx, {
+      type: 'line',
+      data: { datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Semana',
+              color: '#FFFFFF'
+            },
+            ticks: {
+              color: '#FFFFFF'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Promedio',
+              color: '#FFFFFF'
+            },
+            ticks: {
+              color: '#FFFFFF'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#FFFFFF'
+            }
+          }
+        }
+      }
+    });
+  } else {
+    document.getElementById('teacher-graph').innerHTML = '<p>No hay datos suficientes para generar el gráfico.</p>';
+  }
+</script>
+
+{% endblock %}
+
+
+
 
