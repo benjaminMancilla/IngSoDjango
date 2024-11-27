@@ -77,7 +77,7 @@ Se ocupa principalmente para almacenar los resumenes periodicos de las asignatur
 class SubjectResume(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     resume = models.CharField(max_length=500)
 
     class Meta:
