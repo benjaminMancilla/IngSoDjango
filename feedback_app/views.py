@@ -496,8 +496,28 @@ def foro(request, teacherId, subjectId, week_n=None):
     return render(request, 'feedback_app/foro.html', context)
 
 
+
+# def form(request, subject=None, classId=None, userId=None):
+#     if request.method == 'GET':
+#         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
+#         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
+
+#         # Debería accerder al nombre completo, pero por ahora solo tengo el username
+#         usernameTeacher = teacher.user.username
+#         studentId = request.GET.get('student')
+#         subjectId = request.GET.get('subject')
+
+#         context={
+#             'usernameTeacher' : usernameTeacher, # Probablemente también tenga que mandar la clase y el estudiante en POST
+#         }
+#         return render(request, 'feedback_app/form.html', context)
+    
+#     if request.method == 'POST': # lógica de mandar form
+#         #...
+#         return render(request, 'feedback_app/form.html', context)
+
 @login_required
-def form(request, subject=None, classId=None, userId=None):
+def form(request, teacherId=None, subjectId=None, userId=None):
     if request.method == 'GET':
         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
@@ -513,5 +533,51 @@ def form(request, subject=None, classId=None, userId=None):
         return render(request, 'feedback_app/form.html', context)
     
     if request.method == 'POST': # lógica de mandar form
-        #...
-        return render(request, 'feedback_app/form.html', context)
+
+        try:
+            class_calification = request.POST.get('classCalification')
+            calification_reason = request.POST.get('calificationReason')
+            professor_calification = request.POST.get('professorCalification')
+            professor_cal_reason = request.POST.get('professorCalReason')
+            necessity_feedback = request.POST.get('necessityFeedback', '').strip()
+        except ValueError:
+            messages.error(request, "Invalid input.")
+            return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
+        
+        if len(necessity_feedback) > 300:
+            messages.error(request, "En el sector de solicitar material de apoyo no puede contener más de 300 caracteres.")
+            return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
+        
+        grade = (class_calification + professor_calification) / 2
+        if grade < 0:
+            messages.error(request, "El valor no puede ser negativo.")
+            return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
+        
+        try:
+            # tss = TeacherStudentSubject.objects.get(teacher_id=teacherId, subject_id=subjectId, student_id=userId)
+            # tssId = tss.id
+            tssId = TeacherStudentSubject.objects.filter(
+                teacher_id=teacherId,
+                subject_id=subjectId,
+                student_id=userId
+            ).values_list('id', flat=True).first()
+        except TeacherStudentSubject.DoesNotExist:
+            messages.error(request, "Error en parámetros(ids) asociados.")
+            return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
+
+
+        try:
+            Feedback.objects.create(
+                date=datetime.now().date(),
+                grade=grade,
+                content=necessity_feedback,
+                tss_id=tssId,
+            )
+            messages.success(request, "Retroalimentación fue enviado exitosamente.")
+        except TeacherStudentSubject.DoesNotExist:
+            messages.error(request, "Error en parámetros(ids) asociados.")
+        except Exception as e:
+            messages.error(request, f"Ocurrió un error inesperado: {e}")        
+
+        return redirect('foro', teacherId=teacherId, subjectId=subjectId)
+    return redirect('form', teacherId=teacherId, subjectId=subjectId, userId=userId)

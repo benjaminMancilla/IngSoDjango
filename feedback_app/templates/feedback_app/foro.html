@@ -67,7 +67,7 @@
       <h4>Foro de Discusión {{subject.name}}</h4>
 
       {% if identificadores.student %}
-        <form action="{% url 'form' %}" method="get">
+        <form action="{% url 'form' identificadores.teacher identificadores.subject identificadores.student %}" method="get">
           <input type="hidden" name="teacher" value="{{ identificadores.teacher }}">
           <input type="hidden" name="student" value="{{ identificadores.student }}">
           <input type="hidden" name="subject" value="{{ identificadores.subject }}">
