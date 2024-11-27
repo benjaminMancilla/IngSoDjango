@@ -5,6 +5,29 @@ from django.contrib import messages
 from django.template import loader
 from django.http import HttpResponse
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
+from datetime import timedelta, datetime
+
+def calculate_deadline(start_date):
+    """
+    Calcula el plazo (deadline) y verifica si ya está cerrado.
+    """
+    # Crear un objeto datetime directamente con la fecha y hora
+    deadline = datetime(
+        year=start_date.year,
+        month=start_date.month,
+        day=start_date.day,
+        hour=23,
+        minute=59,
+        second=59
+    ) + timedelta(days=6)
+    
+    # Comparar con el datetime actual (sin zonas horarias)
+    current_time = datetime.now()
+    is_closed = deadline < current_time
+
+    return deadline, is_closed
+
+
 
 ## Redirects empty path to login page if user is not authenticated
 ## or to home page if user is authenticated
@@ -82,7 +105,7 @@ def navbar_context(user):
                     'teacherId': teacher.user.id,
                     'subjectName': subject.name,
                 })
-            elif subject.type == Subjects.COMPLEMENTARIOS:
+            elif subject.type == Subject.COMPLEMENTARIOS:
                 context['complementarySubjectList'].append({
                     'subjectId': subject.id,
                     'teacherId': teacher.user.id,
@@ -105,13 +128,20 @@ def navbar_context(user):
                 feedbacks = Feedback.objects.filter(tss=tss, date__week=week_number).select_related(
                     'tss__teacher__user',
                     'tss__student__user').order_by('date')
+                
+                #Get Timer for feedback deadline
+                deadline, is_closed = calculate_deadline(resume.date)
 
                 ##Add resume, feedbacks and week number to the weeks list
                 weeks.append({
                     'date': resume.date,
                     'resume': resume.resume,
                     'feedbacks': feedbacks,
-                    'week_number': week_number
+                    'week_number': week_number,
+                    'timer': {
+                        'deadline': deadline,
+                        'is_closed': is_closed,
+                    }
                 })
 
             context['subjects_info'].append({

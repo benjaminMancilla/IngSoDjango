@@ -1,0 +1,54 @@
+<!-- timers.html -->
+{% load static %}
+
+<div class="timers-container">
+  <div class="row">
+    {% for subject_info in navbar.subjects_info %}
+      {% for week in subject_info.weeks %}
+        {% if not week.timer.is_closed %}
+          <div class="col-md-2">
+            <div class="card mb-3 animate__animated animate__fadeInUp">
+              <div class="card-header">
+                <h5 class="card-title">{{ subject_info.subject.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  Profesor: {{ subject_info.teacher.user.username }}
+                </h6>
+              </div>
+              <div class="card-body">
+                <p class="card-text">
+                  <strong>Semana {{ week.week_number }}</strong>
+                </p>
+                <p class="card-text">
+                    <i class="bi bi-calendar-event-fill"></i>
+                    Fecha de entrega: {{ week.timer.deadline|date:'Y-m-d' }}
+                </p>
+                <p class="card-text">
+                  <i class="bi bi-clock-fill"></i>
+                  Tiempo restante:
+                  <span class="countdown" 
+                        data-deadline="{{ week.timer.deadline|date:'Y-m-d H:i:s' }}"
+                        data-startdate="{{ week.date|date:'Y-m-d' }}">
+                    Calculando...
+                  </span>
+                </p>
+                <!-- Barra de progreso -->
+                <div class="progress mb-2">
+                  <div class="progress-bar" role="progressbar" 
+                       style="width: 0%;" 
+                       aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+                <button class="btn btn-primary">
+                  Ir a semana
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+<script src="{% static 'feedback_app/js/countDown.js' %}"></script>
+
