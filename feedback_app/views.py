@@ -454,14 +454,16 @@ def foro(request, teacherId, subjectId, week_n=None):
                 'is_closed': is_closed,
             }
         })
+    if weeks:
+        if week_n is None:
+            week = weeks[-1]
+        else:
+            week = next((w for w in weeks if w['week_number'] == week_n), None)
 
-    if week_n is None:
-        week = weeks[-1]
+        if week is None:
+            raise ValueError(f"Not found week {week_n}")
     else:
-         week = next((w for w in weeks if w['week_number'] == week_n), None)
-
-    if week is None:
-        raise ValueError(f"Not found week {week_n}")
+        week = None
 
     context['teacher'] = teacher_instance
     context['subject'] = subject
@@ -481,8 +483,9 @@ def foro(request, teacherId, subjectId, week_n=None):
         for i, student in enumerate(students)
     }
 
-    for feedback in week['feedbacks']:
-        feedback.student_emoji = student_emoji_map.get(feedback.tss.student.user_id)
+    if week is not None:
+        for feedback in week['feedbacks']:
+            feedback.student_emoji = student_emoji_map.get(feedback.tss.student.user_id)
 
 
     if user.is_student:
