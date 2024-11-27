@@ -29,10 +29,41 @@
         <p>Aquí puedes revisar el desempeño de tus cursos y gestionar las semanas.</p>
       </div>
     
-      <div id="teacher-graph" class="mb-5">
-        <h3>Promedios Semanales de Todos los Cursos</h3>
-        <canvas id="coursesGraph" class="small-graph"></canvas>
+      <div id="teacher-graph" class="mb-5 d-flex">
+
+        <div class="graph-container">
+          <h3>Promedios Semanales de Todos los Cursos</h3>
+          <canvas id="coursesGraph" class="small-graph"></canvas>
+        </div>
+      
+        <div class="graph-summary ms-4">
+          <h4>Resumen General</h4>
+          <table class="table table-striped table-dark">
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th>Promedio</th>
+                <th>Feedbacks</th>
+                <th>% Feedbacks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for course in graph_summary %}
+              <tr>
+                <td>{{ course.subject }}</td>
+                <td>{{ course.avg_grade }}</td>
+                <td>{{ course.feedback_count }}</td>
+                <td>{{ course.feedback_percentage }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="overall-average mt-3">
+            <strong>Promedio General del Profesor:</strong> {{ overall_avg }}
+          </div>
+        </div>
       </div>
+      
     
       <div id="subjects-feedback">
         <h3>Asignaturas y Feedbacks</h3>

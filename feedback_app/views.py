@@ -269,9 +269,14 @@ def homepage(request, subject=None, classId=None):
     context['navbar'] = navbar_context(user)
 
     if user.is_teacher:
-        # Data for the grade graph
         context['role'] = 'teacher'
+        # Data for the grade graph
         graph_data = []
+        graph_summary = []
+        total_avg = 0
+        total_feedbacks = 0
+        total_expected_feedbacks = 0
+
         for subject_info in context['navbar']['subjects_info']:
             subject_name = subject_info['subject'].name
             weekly_averages = [
@@ -290,11 +295,14 @@ def homepage(request, subject=None, classId=None):
         context['graph_data'] = mark_safe(json.dumps(graph_data))
         print(context['graph_data'])
 
+        # Average grade of the teacher
+
         # Extra data for the feedbacks
         subjects_feedback = []
         for subject_info in context['navbar']['subjects_info']:
             subject = subject_info['subject']
-            students_count = subject.teacherstudentsubject_set.count()
+            students_count = TeacherStudentSubject.objects.filter(subject=subject).count()  # Obtén el número de estudiantes
+
             last_week_feedback_count = sum(
                 len(week['feedbacks']) for week in subject_info['weeks'][-1:]
             )
@@ -304,7 +312,29 @@ def homepage(request, subject=None, classId=None):
                 'last_week_feedback_count': last_week_feedback_count
             })
 
+            # Average grade of the subject
+            subject_avg = sum(week['week_avg_grade'] for week in subject_info['weeks']) / len(subject_info['weeks'])
+            total_avg += subject_avg
+
+            # Count Feedbacks and expected feedbacks
+            feedback_count = sum(len(week['feedbacks']) for week in subject_info['weeks'])
+            expected_feedbacks = len(subject_info['weeks']) * students_count
+            total_feedbacks += feedback_count
+            total_expected_feedbacks += expected_feedbacks
+
+            # Añadir información a la tabla
+            graph_summary.append({
+                'subject': subject.name,
+                'avg_grade': round(subject_avg, 2),
+                'feedback_count': feedback_count,
+                'feedback_percentage': round((feedback_count / expected_feedbacks) * 100, 2) if expected_feedbacks else 0
+            })
+
+        overall_avg = round(total_avg / max(len(context['navbar']['subjects_info']), 1), 2)
+
         context['subjects_feedback'] = subjects_feedback
+        context['graph_summary'] = graph_summary
+        context['overall_avg'] = overall_avg
 
     elif user.is_student:
         context['role'] = 'student'

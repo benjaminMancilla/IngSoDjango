@@ -154,4 +154,52 @@ h3 {
   margin-bottom: 2rem;
 }
 
+#teacher-graph {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #073642;
+  border-radius: 8px;
+}
+
+.graph-container {
+  flex: 2;
+}
+
+.graph-summary {
+  flex: 1;
+  max-width: 400px;
+  background-color: #073642;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.graph-summary table {
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  background-color: transparent;
+  color: #FFFFFF;
+}
+
+.graph-summary th, .graph-summary td {
+  border-color: #004d5e;
+}
+
+.graph-summary table th:last-child {
+  font-size: 0.8rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.graph-summary .overall-average {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+
 
