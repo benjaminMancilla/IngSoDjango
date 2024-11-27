@@ -6,6 +6,8 @@ from django.template import loader
 from django.http import HttpResponse
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
 from datetime import timedelta, datetime
+import json
+from django.utils.safestring import mark_safe
 
 def calculate_deadline(start_date):
     """
@@ -266,16 +268,53 @@ def homepage(request, subject=None, classId=None):
     ## Get the context for the navbar depending on the user
     context['navbar'] = navbar_context(user)
 
-    # Add role to the context
-    if user.is_student:
-        context['role'] = 'student'
-    elif user.is_teacher:
+    if user.is_teacher:
+        # Data for the grade graph
         context['role'] = 'teacher'
+        graph_data = []
+        for subject_info in context['navbar']['subjects_info']:
+            subject_name = subject_info['subject'].name
+            weekly_averages = [
+                {
+                    'week': week['week_number'],
+                    'avg_grade': week['week_avg_grade'] or 0  # Manejar semanas sin promedio
+                }
+                for week in subject_info['weeks']
+            ]
+            graph_data.append({
+                'subject': subject_name,
+                'weekly_averages': weekly_averages
+            })
+
+        # Serialize the data to JSON
+        context['graph_data'] = mark_safe(json.dumps(graph_data))
+        print(context['graph_data'])
+
+        # Extra data for the feedbacks
+        subjects_feedback = []
+        for subject_info in context['navbar']['subjects_info']:
+            subject = subject_info['subject']
+            students_count = subject.teacherstudentsubject_set.count()
+            last_week_feedback_count = sum(
+                len(week['feedbacks']) for week in subject_info['weeks'][-1:]
+            )
+            subjects_feedback.append({
+                'subject': subject,
+                'students_count': students_count,
+                'last_week_feedback_count': last_week_feedback_count
+            })
+
+        context['subjects_feedback'] = subjects_feedback
+
+    elif user.is_student:
+        context['role'] = 'student'
+
     else:
         context['role'] = 'unknown'
 
     # Render the home page
     return render(request, 'feedback_app/home-page.html', context)
+
 
 @login_required
 def foro(request, teacherId, subjectId):
