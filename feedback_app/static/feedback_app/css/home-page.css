@@ -276,5 +276,24 @@ h3 {
   background-color: #2aa198;
 }
 
+.list-group-item {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #0a4e5f;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.list-group-item.active:hover {
+  background-color: #0056b3;
+}
+
+
 
 
