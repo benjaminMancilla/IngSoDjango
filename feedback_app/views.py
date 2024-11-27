@@ -6,6 +6,8 @@ from django.template import loader
 from django.http import HttpResponse
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
 from datetime import timedelta, datetime
+import json
+from django.utils.safestring import mark_safe
 
 def calculate_deadline(start_date):
     """
@@ -153,62 +155,196 @@ def navbar_context(user):
         return context
 
     elif user.is_teacher:
+        teacher_instance = user.teacher
+
+        # Subjects that the teacher teaches
+        subjects = Subject.objects.filter(
+            teacherstudentsubject__teacher=teacher_instance
+        ).distinct()
+
+        # Subject information
+        subjects_info = []
+
+        for subject in subjects:
+            # Filter the subjects by type
+            if subject.type == Subject.SOCIALES:
+                context['socialSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subject.EXACTAS:
+                context['exactSubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+            elif subject.type == Subject.COMPLEMENTARIOS:
+                context['complementarySubjectList'].append({
+                    'subjectId': subject.id,
+                    'subjectName': subject.name,
+                })
+
+            # Get the resumes of the subject (all weeks)
+            resumes = SubjectResume.objects.filter(
+                subject=subject,
+                teacher=teacher_instance
+            ).order_by('date')
+
+            # Create weekly information
+            weeks = []
+
+            # Subject average grade
+            subject_grades = []
+
+            for resume in resumes:
+                # Week number
+                week_number = resume.date.isocalendar()[1]
+
+                # Week feedbacks
+                feedbacks = Feedback.objects.filter(
+                    tss__subject=subject,
+                    tss__teacher=teacher_instance,
+                    date__week=week_number
+                ).select_related(
+                    'tss__student__user',
+                    'tss__teacher__user'
+                ).order_by('date')
+
+                #Obtain the average grade of the week
+                grades = feedbacks.values_list('grade', flat=True)
+                grades_list = list(grades)
+
+                #Calculate the average grade of the week
+                if grades_list:
+                    week_avg_grade = sum(grades_list) / len(grades_list)
+                else:
+                    week_avg_grade = 7.0
+
+                #Add grades to the subject grades list
+                subject_grades.extend(grades_list)
+
+                # Get deadline and check if it is closed
+                deadline, is_closed = calculate_deadline(resume.date)
+
+                weeks.append({
+                    'date': resume.date,
+                    'resume': resume.resume,
+                    'feedbacks': feedbacks,
+                    'week_number': week_number,
+                    'week_avg_grade': week_avg_grade,
+                    'timer': {
+                        'deadline': deadline,
+                        'is_closed': is_closed,
+                    }
+                })
+
+            # Calculate the average grade of the subject
+            if subject_grades:
+                subject_avg_grade = sum(subject_grades) / len(subject_grades)
+            else:
+                subject_avg_grade = 7.0
+
+            subjects_info.append({
+                'subject': subject,
+                'teacher': teacher_instance,
+                'weeks': weeks,
+                'subject_avg_grade': subject_avg_grade
+            })
+
+        context['subjects_info'] = subjects_info
+
+        return context
+
+    else:
+        # Context Vacio para el default
 
         return context
 
 ##Renders home page with all the information of the student
 @login_required
 def homepage(request, subject=None, classId=None):
-
     user = request.user
-
     context = {}
-    
+
+    ## Get the context for the navbar depending on the user
     context['navbar'] = navbar_context(user)
 
-    if user.is_student:
-        
-        return render(request, 'feedback_app/home-page.html', context)
-    elif user.is_teacher:
-        ##For the moment, teacher is not implemented
+    if user.is_teacher:
+        context['role'] = 'teacher'
+        # Data for the grade graph
+        graph_data = []
+        graph_summary = []
+        total_avg = 0
+        total_feedbacks = 0
+        total_expected_feedbacks = 0
 
+        for subject_info in context['navbar']['subjects_info']:
+            subject_name = subject_info['subject'].name
+            weekly_averages = [
+                {
+                    'week': week['week_number'],
+                    'avg_grade': week['week_avg_grade'] or 0  # Manejar semanas sin promedio
+                }
+                for week in subject_info['weeks']
+            ]
+            graph_data.append({
+                'subject': subject_name,
+                'weekly_averages': weekly_averages
+            })
 
-        # context={
-        #     'subjectList':[],
-        #     'subjects_info':[],
-        # }
+        # Serialize the data to JSON
+        context['graph_data'] = mark_safe(json.dumps(graph_data))
+        print(context['graph_data'])
 
+        # Average grade of the teacher
 
-        # teacher_instance = Teacher.objects.get(user=user)
+        # Extra data for the feedbacks
+        subjects_feedback = []
+        for subject_info in context['navbar']['subjects_info']:
+            subject = subject_info['subject']
+            students_count = TeacherStudentSubject.objects.filter(subject=subject).count()  # Obtén el número de estudiantes
 
-        # context['teacher'] = user.id
-        # ##Get all tuples of subjects and teachers
-        # tss_list = TeacherStudentSubject.objects.filter(teacher=teacher_instance).select_related(
-        #     'subject', 'teacher'
-        # )
-        # for tss in tss_list:
-        #     ##Get subject and teacher
-        #     subject = tss.subject
-        #     teacher = tss.teacher
-            
-            # if subject.name in socialSubjects:
-            #     context['socialSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in exactSubjects:
-            #     context['exactSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in complementarySubjects:
-            #     context['complementarySubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
+            last_week_feedback_count = sum(
+                len(week['feedbacks']) for week in subject_info['weeks'][-1:]
+            )
+            subjects_feedback.append({
+                'subject': subject,
+                'students_count': students_count,
+                'last_week_feedback_count': last_week_feedback_count
+            })
 
+            # Average grade of the subject
+            subject_avg = sum(week['week_avg_grade'] for week in subject_info['weeks']) / len(subject_info['weeks'])
+            total_avg += subject_avg
 
-        return render(request, 'feedback_app/home-page.html')
+            # Count Feedbacks and expected feedbacks
+            feedback_count = sum(len(week['feedbacks']) for week in subject_info['weeks'])
+            expected_feedbacks = len(subject_info['weeks']) * students_count
+            total_feedbacks += feedback_count
+            total_expected_feedbacks += expected_feedbacks
+
+            # Añadir información a la tabla
+            graph_summary.append({
+                'subject': subject.name,
+                'avg_grade': round(subject_avg, 2),
+                'feedback_count': feedback_count,
+                'feedback_percentage': round((feedback_count / expected_feedbacks) * 100, 2) if expected_feedbacks else 0
+            })
+
+        overall_avg = round(total_avg / max(len(context['navbar']['subjects_info']), 1), 2)
+
+        context['subjects_feedback'] = subjects_feedback
+        context['graph_summary'] = graph_summary
+        context['overall_avg'] = overall_avg
+
+    elif user.is_student:
+        context['role'] = 'student'
+
+    else:
+        context['role'] = 'unknown'
+
+    # Render the home page
+    return render(request, 'feedback_app/home-page.html', context)
+
 
 @login_required
 def foro(request, teacherId, subjectId):
