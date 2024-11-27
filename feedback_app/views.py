@@ -115,8 +115,10 @@ def navbar_context(user):
                 })
                 
             ##Get weekly information
-            resumes = SubjectResume.objects.filter(subject=subject).select_related(
+            resumes = SubjectResume.objects.filter(subject=subject, teacher=teacher).select_related(
                 'teacher', 'subject').order_by('date')
+            
+            print(resumes)
 
             ##List of weekly information of the subject
             weeks = []
@@ -171,16 +173,19 @@ def navbar_context(user):
                 context['socialSubjectList'].append({
                     'subjectId': subject.id,
                     'subjectName': subject.name,
+                    'teacherId': teacher_instance.user.id,
                 })
             elif subject.type == Subject.EXACTAS:
                 context['exactSubjectList'].append({
                     'subjectId': subject.id,
                     'subjectName': subject.name,
+                    'teacherId': teacher_instance.user.id,
                 })
             elif subject.type == Subject.COMPLEMENTARIOS:
                 context['complementarySubjectList'].append({
                     'subjectId': subject.id,
                     'subjectName': subject.name,
+                    'teacherId': teacher_instance.user.id,
                 })
 
             # Get the resumes of the subject (all weeks)
@@ -414,7 +419,7 @@ def foro(request, teacherId, subjectId):
             #     })
 
 
-        return render(request, 'feedback_app/home-page.html')
+        return render(request, 'feedback_app/foro.html', context)
     return render(request, 'feedback_app/home-page.html')
 
 @login_required
