@@ -386,9 +386,14 @@ def homepage(request, subject=None, classId=None):
 
 
 @login_required
-def foro(request, teacherId, subjectId):
+def foro(request, teacherId, subjectId, week_n=None):
     user = request.user
     subject = Subject.objects.get(id=subjectId)
+    teacher_instance = Teacher.objects.get(user_id=teacherId)
+    week = None
+
+    if user.is_teacher:
+        teacher_instance = Teacher.objects.get(user=user)
 
     context = {
         'identificadores': {
@@ -400,82 +405,95 @@ def foro(request, teacherId, subjectId):
     
     context['navbar'] = navbar_context(user)
 
+    tss_list = TeacherStudentSubject.objects.filter(teacher=teacherId, subject=subjectId)
+    for tss in tss_list:
+        question_list = Question.objects.filter(tss=tss)
+        for question in question_list:
+            context['mensajes_foro'].append({
+                'name': tss.student.mask,
+                'content': question.content,
+            })
+
+    subject_resumes = SubjectResume.objects.filter(teacher=teacher_instance, subject=subject).order_by('date')
+    weeks = []
+    for resume in subject_resumes:
+        # Week number
+        week_number = resume.date.isocalendar()[1]
+
+        # Week feedbacks
+        feedbacks = Feedback.objects.filter(
+            tss__subject=subject,
+            tss__teacher=teacher_instance,
+            date__week=week_number
+        ).select_related(
+            'tss__student__user',
+            'tss__teacher__user'
+        ).order_by('date')
+
+        #Obtain the average grade of the week
+        grades = feedbacks.values_list('grade', flat=True)
+        grades_list = list(grades)
+
+        #Calculate the average grade of the week
+        if grades_list:
+            week_avg_grade = sum(grades_list) / len(grades_list)
+        else:
+            week_avg_grade = 7.0
+
+        # Get deadline and check if it is closed
+        deadline, is_closed = calculate_deadline(resume.date)
+
+        weeks.append({
+            'date': resume.date,
+            'resume': resume.resume,
+            'feedbacks': feedbacks,
+            'week_number': week_number,
+            'week_avg_grade': week_avg_grade,
+            'timer': {
+                'deadline': deadline,
+                'is_closed': is_closed,
+            }
+        })
+
+    if week_n is None:
+        week = weeks[-1]
+    else:
+         week = next((w for w in weeks if w['week_number'] == week_n), None)
+
+    if week is None:
+        raise ValueError(f"Not found week {week_n}")
+
+    context['teacher'] = teacher_instance
+    context['subject'] = subject
+    context['week'] = week
+    context['weeks'] = weeks
+
+    # Emoji list
+    animal_emojis = [
+        "🐱", "🐶", "🦊", "🐰", "🐻", 
+        "🦁", "🐯", "🐼", "🐨", "🐺"
+    ]
+
+    # Emoji map
+    students = [tss.student for tss in tss_list]
+    student_emoji_map = {
+        student.user_id: animal_emojis[i % len(animal_emojis)]
+        for i, student in enumerate(students)
+    }
+
+    for feedback in week['feedbacks']:
+        feedback.student_emoji = student_emoji_map.get(feedback.tss.student.user_id)
+
+
     if user.is_student:
         context['identificadores']['student'] = user.id
-        teacher_instance = Teacher.objects.get(user_id=teacherId)
-        
-        tss_list = TeacherStudentSubject.objects.filter(teacher=teacherId, subject=subjectId)
-        for tss in tss_list:
-            question_list = Question.objects.filter(tss=tss)
-            for question in question_list:
-                context['mensajes_foro'].append({
-                    'name': tss.student.mask,
-                    'content': question.content,
-                })
+        context['identificadores']['subject'] = subjectId
+        context['identificadores']['teacher'] = teacherId
 
-        subject_resumes = SubjectResume.objects.filter(teacher=teacher_instance, subject=subject).order_by('date')
-
-        weekly_averages = []
-        for resume in subject_resumes:
-            week_number = resume.date.isocalendar()[1]
-
-            feedbacks = Feedback.objects.filter(
-                tss__teacher=teacher_instance,
-                tss__subject=subject,
-                date__week=week_number
-            )
-
-            avg_grade = 0
-            if feedbacks:
-                grades = feedbacks.values_list('grade', flat=True)
-                avg_grade = sum(grades) / len(grades)
-
-            weekly_averages.append({
-                'week_number': week_number,
-                'avg_grade': round(avg_grade, 2),
-                'date': resume.date
-            })
-
-        context['teacher'] = teacher_instance
-        context['subject'] = subject
-        context['weekly_averages'] = weekly_averages
-
-        return render(request, 'feedback_app/foro.html', context)
-
-    elif user.is_teacher:
+    if user.is_teacher:
         context['identificadores']['teacher'] = user.id
-        teacher_instance = Teacher.objects.get(user=user)
-        
-        subject_resumes = SubjectResume.objects.filter(teacher=teacher_instance, subject=subject).order_by('date')
 
-        weekly_averages = []
-        for resume in subject_resumes:
-            week_number = resume.date.isocalendar()[1]
-
-            feedbacks = Feedback.objects.filter(
-                tss__teacher=teacher_instance,
-                tss__subject=subject,
-                date__week=week_number
-            )
-
-            avg_grade = 0
-            if feedbacks:
-                grades = feedbacks.values_list('grade', flat=True)
-                avg_grade = sum(grades) / len(grades)
-
-            weekly_averages.append({
-                'week_number': week_number,
-                'avg_grade': round(avg_grade, 2),
-                'date': resume.date
-            })
-
-        context['teacher'] = user
-        context['subject'] = subject
-        context['weekly_averages'] = weekly_averages
-
-        return render(request, 'feedback_app/foro.html', context)
-
-    return render(request, 'feedback_app/home-page.html')
+    return render(request, 'feedback_app/foro.html', context)
 
 
 @login_required

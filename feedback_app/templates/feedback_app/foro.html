@@ -14,12 +14,15 @@
 
 <div class="container mt-4">
   <div class="row">
+    <!-- Lista de semanas -->
     <div class="col-md-3">
       <div class="class-list">
         <ul class="list-group">
-          {% for week in weekly_averages %}
-            <li class="list-group-item">
-              Semana {{ week.week_number }}
+          {% for w in weeks %}
+            <li class="list-group-item {% if w.week_number == week.week_number %}active{% endif %}">
+              <a href="{% url 'foro' identificadores.teacher identificadores.subject w.week_number %}" class="text-decoration-none text-light">
+                Semana {{ w.week_number }}
+              </a>
             </li>
           {% endfor %}
           {% if user.is_teacher %}
@@ -30,10 +33,11 @@
             </li>
           {% endif %}
         </ul>
+        
       </div>
     </div>
 
-    
+    <!-- Modal para añadir semana -->
     <div class="modal fade" id="addWeekModal" tabindex="-1" aria-labelledby="addWeekModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -57,10 +61,10 @@
         </div>
       </div>
     </div>
-    
-    
+
+    <!-- Foro de discusión -->
     <div class="col-md-6">
-      <h4>Foro de Discusión</h4>
+      <h4>Foro de Discusión {{subject.name}}</h4>
 
       {% if identificadores.student %}
         <form action="{% url 'form' %}" method="get">
@@ -74,11 +78,13 @@
       {% endif %}
 
       <div id="posts-list">
-        {% for post in mensajes_foro %}
+        {% for post in week.feedbacks %}
           <div class="posts-container">
             <div class="posts-author">
-              <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
-              <p>{{ post.name }}</p>
+              <!-- Mostrar el emoji correspondiente al estudiante -->
+              <span style="font-size: 2rem;">{{ post.student_emoji }}</span>
+
+              <p>{{ post.tss.student.mask }}</p>
             </div>
             <div class="posts-content">
               <p>{{ post.content }}</p>
@@ -88,14 +94,14 @@
       </div>
     </div>
 
+    <!-- Resumen y promedio de la semana -->
     <div class="col-md-3">
       <div class="summary">
         <h4>Resumen</h4>
-        {% if weekly_averages %}
-          {% with weekly_averages|last as last_week %}
-            <p>Promedio de la última semana:</p>
-            <p><strong>{{ last_week.avg_grade }}</strong></p>
-          {% endwith %}
+        {% if week %}
+          <p><strong>Semana {{ week.week_number }}</strong></p>
+          <p>Resumen: {{ week.resume }}</p>
+          <p>Promedio de la semana: <strong>{{ week.week_avg_grade }}</strong></p>
         {% else %}
           <p>No hay semanas registradas.</p>
         {% endif %}
@@ -103,5 +109,6 @@
     </div>
   </div>
 </div>
+
 
 {% endblock %}
