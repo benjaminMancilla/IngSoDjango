@@ -8,4 +8,5 @@ urlpatterns = [
     path('foro/<int:teacherId>/<int:subjectId>/', views.foro, name='foro'),
     path('form/', views.form, name='form'),
     path('logout/', views.logout_view, name='logout'),
+    path('add-week/<int:teacherId>/<int:subjectId>/', views.add_week, name='add_week'),
 ]
