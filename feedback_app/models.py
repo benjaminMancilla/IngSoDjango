@@ -107,7 +107,7 @@ Se ocupa para poder almacenar la informacion de un feedback, con nota.
 '''
 class Feedback(models.Model):
     tss = models.ForeignKey(TeacherStudentSubject, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     grade = models.PositiveSmallIntegerField()
     content = models.CharField(max_length=300)
     

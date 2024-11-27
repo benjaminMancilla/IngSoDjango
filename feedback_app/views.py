@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from feedback_app.models import Student, Teacher, User, TeacherStudentSubject, SubjectResume, Feedback, Subject, Question
 from datetime import timedelta, datetime, date
 import json
@@ -21,7 +21,7 @@ def calculate_deadline(start_date):
         hour=23,
         minute=59,
         second=59
-    ) + timedelta(days=6)
+    ) + timedelta(days=7)
     
     # Comparar con el datetime actual (sin zonas horarias)
     current_time = datetime.now()
@@ -517,12 +517,17 @@ def foro(request, teacherId, subjectId, week_n=None):
 #         return render(request, 'feedback_app/form.html', context)
 
 @login_required
-def form(request, teacherId=None, subjectId=None, userId=None):
+def form(request, teacherId=None, subjectId=None, userId=None, week_date=None):
     user = request.user
     if request.method == 'GET':
         
         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
+
+        try:
+            week_date = datetime.strptime(week_date, "%Y-%m-%d").date()
+        except ValueError:
+            return HttpResponseBadRequest("Formato de fecha inválido. Use YYYY-MM-DD.")
 
 
 
@@ -537,6 +542,7 @@ def form(request, teacherId=None, subjectId=None, userId=None):
             'subjectId': subjectId,
             'userId': userId,
             'navbar': navbar_context(user),
+            'week_date': week_date,
         }
         return render(request, 'feedback_app/form.html', context)
     
@@ -576,7 +582,7 @@ def form(request, teacherId=None, subjectId=None, userId=None):
 
         try:
             Feedback.objects.create(
-                date=datetime.now().date(),
+                date=week_date,
                 grade=grade,
                 content=necessity_feedback,
                 tss_id=tssId,
