@@ -518,7 +518,9 @@ def foro(request, teacherId, subjectId, week_n=None):
 
 @login_required
 def form(request, teacherId=None, subjectId=None, userId=None):
+    user = request.user
     if request.method == 'GET':
+        
         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
 
@@ -534,26 +536,27 @@ def form(request, teacherId=None, subjectId=None, userId=None):
             'teacherId': teacherId,
             'subjectId': subjectId,
             'userId': userId,
+            'navbar': navbar_context(user),
         }
         return render(request, 'feedback_app/form.html', context)
     
     if request.method == 'POST': # lógica de mandar form
 
         try:
-            class_calification = request.POST.get('classCalification')
-            calification_reason = request.POST.get('calificationReason')
-            professor_calification = request.POST.get('professorCalification')
-            professor_cal_reason = request.POST.get('professorCalReason')
-            necessity_feedback = request.POST.get('necessityFeedback', '').strip()
+            class_calification = int(request.POST.get('classCalification', 0))
+            
         except ValueError:
             messages.error(request, "Invalid input.")
             return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
-        
+        professor_calification = request.POST.get('professorCalification')
+        calification_reason = request.POST.get('calificationReason')
+        professor_cal_reason = request.POST.get('professorCalReason')
+        necessity_feedback = request.POST.get('necessityFeedback', '').strip()
         if len(necessity_feedback) > 300:
             messages.error(request, "En el sector de solicitar material de apoyo no puede contener más de 300 caracteres.")
             return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})
         
-        grade = (class_calification + professor_calification) / 2
+        grade = class_calification
         if grade < 0:
             messages.error(request, "El valor no puede ser negativo.")
             return render(request, 'feedback_app/form.html', {'teacherId': teacherId, 'subjectId': subjectId, 'userId': userId})

@@ -6,6 +6,16 @@
     {% endblock %}
     {% block content %}
 
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
 
     <div id="mainContainer" class="container-sm mt-4">
         <h1>Formulario de Retroalimentación  de {{ usernameTeacher }} </h1>
@@ -14,7 +24,8 @@
             <ul id="notificationList"></ul>
         </div>
         <div id="questionnaireContainer">
-            <form name="mainForm" action="{% url 'form' teacherId subjectId userId %}" method="post">               
+            <form name="mainForm" action="{% url 'form' teacherId subjectId userId %}" method="post">
+                {% csrf_token %}               
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
@@ -91,8 +102,8 @@
                     </div> 
                     <!-- </form><br><br> -->
                     <div id="professorCalificationReason" hidden>
-                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Obligatorio):</label><br>
-                        <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text" required></textarea><br><br>
+                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Optional):</label><br>
+                        <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text"></textarea><br><br>
                     </div>                    
                 </div>
                 <div class="mb-3">

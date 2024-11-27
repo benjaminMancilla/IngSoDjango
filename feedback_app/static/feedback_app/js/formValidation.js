@@ -25,6 +25,16 @@ const validateCalificationComment = (comment) => {
     return true;
 }
 
+const updateRequiredStatus = () => {
+    const professorCalReason = document.getElementById("professorCalReason");
+
+    
+    if (professorCalReason.hidden) {
+        professorCalReason.hidden = false;
+        professorCalReason.removeAttribute("required");
+    }
+};
+
 const reasonBlock = document.getElementById("professorCalificationReason");
 
 function hideReasonInput() {
@@ -38,6 +48,7 @@ function unhideReasonInput() {
 };
 
 const validateForm = () => {
+    console.log("Form is being checked....");
     let theForm = document.forms["mainForm"];
     let classCalReason = theForm["calificationReason"].value;
     let feedback = theForm["necessityFeedback"].value;
@@ -46,6 +57,7 @@ const validateForm = () => {
     let hiddenInput = document.getElementById("professorCalReason");
     
     // let 
+    updateRequiredStatus();
     
     let invalidInputs = [];
     let isValid = true;
@@ -110,9 +122,10 @@ const validateForm = () => {
         backButton.addEventListener("click", () => {
             theForm.style.display = "block";
             notificationBox.hidden = true;
+            hideReasonInput();
         });
         submitButton.addEventListener("click", () => {
-            notificationMessage.innerText = "Hemos recibido su retroalimentación. Muchas gracias."
+            notificationMessage.innerText = "Hemos recibido su retroalimentación. Muchas gracias.";
             submitButton.hidden = true;
             backButton.hidden = true;
             theForm.submit();
