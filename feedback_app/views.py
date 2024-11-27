@@ -522,6 +522,8 @@ def form(request, teacherId=None, subjectId=None, userId=None):
         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
 
+
+
         # Debería accerder al nombre completo, pero por ahora solo tengo el username
         usernameTeacher = teacher.user.username
         studentId = request.GET.get('student')
@@ -529,6 +531,9 @@ def form(request, teacherId=None, subjectId=None, userId=None):
 
         context={
             'usernameTeacher' : usernameTeacher, # Probablemente también tenga que mandar la clase y el estudiante en POST
+            'teacherId': teacherId,
+            'subjectId': subjectId,
+            'userId': userId,
         }
         return render(request, 'feedback_app/form.html', context)
     

@@ -115,7 +115,7 @@ const validateForm = () => {
             notificationMessage.innerText = "Hemos recibido su retroalimentación. Muchas gracias."
             submitButton.hidden = true;
             backButton.hidden = true;
-            //theForm.submit();
+            theForm.submit();
         })
         notificationList.appendChild(submitButton);
         notificationList.appendChild(backButton);

@@ -1,7 +1,8 @@
 {% extends 'navbar.html' %}
+{% load static %}
     {% block title %} Formulario de Retroalimentación {% endblock %}
     {% block css %}
-    <link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/form.css">
+    <link rel="stylesheet" type="text/css" href= "{% static 'feedback_app/css/form.css' %}">
     {% endblock %}
     {% block content %}
 
@@ -13,7 +14,7 @@
             <ul id="notificationList"></ul>
         </div>
         <div id="questionnaireContainer">
-            <form name="mainForm" action="">               
+            <form name="mainForm" action="{% url 'form' teacherId subjectId userId %}" method="post">               
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
@@ -100,7 +101,7 @@
                 </div>
                 <div id="sender"></div>
                 <div class="d-flex justify-content-end">
-                    <button id="sendQuestionnaireButton" type="button" class="btn btn-primary me-3">Enviar su retroalimentación</button>
+                    <button id="sendQuestionnaireButton" type="submit" class="btn btn-primary me-3">Enviar su retroalimentación</button>
                 </div>
             </form>
         </div>
@@ -109,5 +110,5 @@
     
     {% endblock %}
     {% block javascript %}
-    <script src="../../static/feedback_app/js/formValidation.js"></script>
+    <script src="{% static 'feedback_app/js/formValidation.js' %}"></script>
     {% endblock %}
