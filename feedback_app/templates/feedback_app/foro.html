@@ -1,0 +1,115 @@
+{% extends 'navbar.html' %}
+{% block title %} Foro {% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/feedback_app/css/home-page.css">
+{% endblock %}
+{% block content %}
+<!--
+<div id="personalInfoContainer" class="personalInfoContainer">
+  <h1>{{ user.first_name }} {{ user.last_name }}</h1> <br>
+  <p>Correo: {{ user.email }}</p> <br>
+  <p>Fecha de ingreso: {{ user.date_joined }}</p> <br>
+</div>
+-->
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Lista de semanas -->
+    <div class="col-md-3">
+      <div class="class-list">
+        <ul class="list-group">
+          {% for w in weeks %}
+            <li class="list-group-item {% if w.week_number == week.week_number %}active{% endif %}">
+              <a href="{% url 'foro' identificadores.teacher identificadores.subject w.week_number %}" class="text-decoration-none text-light">
+                Semana {{ w.week_number }}
+              </a>
+            </li>
+          {% endfor %}
+          {% if user.is_teacher %}
+            <li class="list-group-item text-center">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWeekModal">
+                Añadir Semana
+              </button>
+            </li>
+          {% endif %}
+        </ul>
+        
+      </div>
+    </div>
+
+    <!-- Modal para añadir semana -->
+    <div class="modal fade" id="addWeekModal" tabindex="-1" aria-labelledby="addWeekModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="{% url 'add_week' identificadores.teacher identificadores.subject %}" method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+              <h5 class="modal-title" id="addWeekModalLabel">Añadir Nueva Semana</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="summary" class="form-label">Resumen de la Semana</label>
+                <textarea class="form-control" id="summary" name="summary" rows="4" placeholder="Escribe el resumen de la semana..."></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-success">Guardar Semana</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Foro de discusión -->
+    <div class="col-md-6">
+      <h4>Foro de Discusión {{subject.name}}</h4>
+
+      {% if identificadores.student and week %}
+        <form action="{% url 'form' identificadores.teacher identificadores.subject identificadores.student week.date %}" method="get">
+          <input type="hidden" name="teacher" value="{{ identificadores.teacher }}">
+          <input type="hidden" name="student" value="{{ identificadores.student }}">
+          <input type="hidden" name="subject" value="{{ identificadores.subject }}">
+          <div id="feedback-button">
+            <button class="btn btn-primary" type="submit">Añadir Feedback</button>
+          </div>
+        </form>
+      {% endif %}
+
+
+      <div id="posts-list">
+        {% for post in week.feedbacks %}
+          <div class="posts-container">
+            <div class="posts-author">
+              <!-- Mostrar el emoji correspondiente al estudiante -->
+              <span style="font-size: 2rem;">{{ post.student_emoji }}</span>
+
+              <p>{{ post.tss.student.mask }}</p>
+            </div>
+            <div class="posts-content">
+              <p>{{ post.content }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Resumen y promedio de la semana -->
+    <div class="col-md-3">
+      <div class="summary">
+        <h4>Resumen</h4>
+        {% if week %}
+          <p><strong>Semana {{ week.week_number }}</strong></p>
+          <p>Resumen: {{ week.resume }}</p>
+          <p>Promedio de la semana: <strong>{{ week.week_avg_grade }}</strong></p>
+        {% else %}
+          <p>No hay semanas registradas.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

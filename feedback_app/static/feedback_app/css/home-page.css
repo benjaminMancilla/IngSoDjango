@@ -3,6 +3,10 @@ body {
     color: white;
   }
 
+h3 {
+    margin-bottom: 20px;
+  }
+
   #feedback-button {
     margin-top: 10px;
     text-align: center;
@@ -28,6 +32,7 @@ body {
     padding: 10px;
     border-radius: 5px;
   }
+
   .class-list {
     background-color: #073642;
     border-radius: 8px;
@@ -37,6 +42,7 @@ body {
     background-color: transparent;
     color: #93a1a1;
     border: none;
+    text-align: center
   }
   .class-list .list-group-item.active {
     background-color: #268bd2;
@@ -63,3 +69,231 @@ body {
     z-index: 9999; 
     border-radius: 10px;
   }
+
+.card-header {
+  background-color: #276baf;
+  color: #fff;
+}
+
+.countdown {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.progress-bar {
+  background-color: #28a745;
+}
+
+.progress-bar.bg-danger {
+  background-color: #dc3545;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.small-graph {
+  width: 100%;
+  max-width: 900px;
+  max-height: 400px;
+  margin: 0;
+  display: block;
+}
+
+#coursesGraph {
+  background-color: #094958;
+  border-radius: 8px;
+}
+
+#teacher-dashboard {
+  color: #FFFFFF;
+}
+
+#teacher-greeting {
+  text-align: center;
+  padding: 1rem;
+  background-color: #073642;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.subjects-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.subject-box {
+  flex: 1 1 calc(33.333% - 1rem);
+  background-color: #003b4c;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  color: #FFFFFF;
+  margin-bottom: 2%;
+}
+
+.subject-box h4 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.subject-box p {
+  margin: 0.5rem 0;
+}
+
+.subject-box .btn {
+  display: block;
+  width: 100%;
+}
+
+#teacher-graph {
+  padding: 1rem;
+  background-color: #073642;
+  border-radius: 8px;
+  margin-bottom: 1rem !important;
+}
+
+#teacher-graph {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background-color: #073642;
+  border-radius: 8px;
+}
+
+.graph-container {
+  flex: 2;
+}
+
+.graph-summary {
+  flex: 1;
+  max-width: 400px;
+  background-color: #073642;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.graph-summary table {
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  background-color: transparent;
+  color: #FFFFFF;
+}
+
+.graph-summary th, .graph-summary td {
+  border-color: #004d5e;
+}
+
+.graph-summary table th:last-child {
+  font-size: 0.8rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.graph-summary .overall-average {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.list-group-item.text-center {
+  text-align: center;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content {
+  background-color: #073642;
+  color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #3d5c72;
+}
+
+.modal-header {
+  background-color: #002b36;
+  color: #ffffff;
+  border-bottom: 1px solid #3d5c72;
+}
+
+.modal-header .btn-close {
+  filter: invert(100%);
+}
+
+.modal-body textarea {
+  background-color: #002b36;
+  color: #ffffff;
+  border: 1px solid #3d5c72;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease
+  
+}
+
+.modal-body textarea:focus {
+  background-color: #002b36;
+  color: #ffffff;
+  border-color: #101f2b;
+  outline: none;
+  box-shadow: 0 0 10px rgba(42, 161, 152, 0.5);
+}
+
+.modal-body textarea::placeholder {
+  color: #586e75;
+  font-style: italic;
+}
+
+.modal-footer {
+  background-color: #002b36;
+  border-top: 1px solid #3d5c72;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #586e75;
+  color: #ffffff;
+  border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #657b83;
+}
+
+.modal-footer .btn-success {
+  background-color: #268bd2;
+  color: #ffffff;
+  border: none;
+}
+
+.modal-footer .btn-success:hover {
+  background-color: #2aa198;
+}
+
+.list-group-item {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #0a4e5f;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.list-group-item.active:hover {
+  background-color: #0056b3;
+}
+
+
+
+

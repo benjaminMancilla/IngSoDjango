@@ -1,24 +1,37 @@
 {% extends 'navbar.html' %}
+{% load static %}
     {% block title %} Formulario de Retroalimentación {% endblock %}
     {% block css %}
-    <link rel="stylesheet" type="text/css" href= "../static/feedback_app/css/form.css">
+    <link rel="stylesheet" type="text/css" href= "{% static 'feedback_app/css/form.css' %}">
     {% endblock %}
     {% block content %}
+    <!--
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    -->
 
 
     <div id="mainContainer" class="container-sm mt-4">
-        <h1>Formulario de Retroalimentación  de ______ </h1>
+        <h1>Formulario de Retroalimentación  de {{ usernameTeacher }} </h1>
         <div id="notificationBox" hidden>
             <h2 id="notificationMsg">.</h2>
             <ul id="notificationList"></ul>
         </div>
         <div id="questionnaireContainer">
-            <form name="mainForm" action="">               
+            <form name="mainForm" action="{% url 'form' teacherId subjectId userId week_date %}" method="post">
+                {% csrf_token %}               
                 <div class="row">
                     <div class="col-md-8">
                         <div class="mb-3">
                             <br>
-                            <p class="form-label">¿Se siente satisfecho/a/e con la(s) clase(s) de _____ que tuvo en la semana? (Obligatorio): </p>
+                            <p class="form-label">¿Se siente satisfecho/a/e con la(s) clase(s) de {{ usernameTeacher }} que tuvo en la semana? (Obligatorio): </p>
                             <!-- <form> -->
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="calification1" name="classCalification" value="1" class="form-check-input" required>
@@ -90,8 +103,8 @@
                     </div> 
                     <!-- </form><br><br> -->
                     <div id="professorCalificationReason" hidden>
-                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Obligatorio):</label><br>
-                        <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text" required></textarea><br><br>
+                        <label for="professorCalReason" class="form-label">La razón de la respuesta anterior es (Optional):</label><br>
+                        <textarea id="professorCalReason" name="professorCalReason" rows="4" cols="50" class="form-text"></textarea><br><br>
                     </div>                    
                 </div>
                 <div class="mb-3">
@@ -100,7 +113,7 @@
                 </div>
                 <div id="sender"></div>
                 <div class="d-flex justify-content-end">
-                    <button id="sendQuestionnaireButton" type="button" class="btn btn-primary me-3">Enviar su retroalimentación</button>
+                    <button id="sendQuestionnaireButton" type="submit" class="btn btn-primary me-3">Enviar su retroalimentación</button>
                 </div>
             </form>
         </div>
@@ -109,5 +122,5 @@
     
     {% endblock %}
     {% block javascript %}
-    <script src="../../static/feedback_app/js/formValidation.js"></script>
+    <script src="{% static 'feedback_app/js/formValidation.js' %}"></script>
     {% endblock %}
