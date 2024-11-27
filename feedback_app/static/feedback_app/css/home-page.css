@@ -32,6 +32,7 @@ h3 {
     padding: 10px;
     border-radius: 5px;
   }
+
   .class-list {
     background-color: #073642;
     border-radius: 8px;
@@ -41,6 +42,7 @@ h3 {
     background-color: transparent;
     color: #93a1a1;
     border: none;
+    text-align: center
   }
   .class-list .list-group-item.active {
     background-color: #268bd2;
@@ -199,6 +201,79 @@ h3 {
   margin-top: 1rem;
   font-size: 1.2rem;
   color: #ffffff;
+}
+
+.list-group-item.text-center {
+  text-align: center;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content {
+  background-color: #073642;
+  color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #3d5c72;
+}
+
+.modal-header {
+  background-color: #002b36;
+  color: #ffffff;
+  border-bottom: 1px solid #3d5c72;
+}
+
+.modal-header .btn-close {
+  filter: invert(100%);
+}
+
+.modal-body textarea {
+  background-color: #002b36;
+  color: #ffffff;
+  border: 1px solid #3d5c72;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease
+  
+}
+
+.modal-body textarea:focus {
+  background-color: #002b36;
+  color: #ffffff;
+  border-color: #101f2b;
+  outline: none;
+  box-shadow: 0 0 10px rgba(42, 161, 152, 0.5);
+}
+
+.modal-body textarea::placeholder {
+  color: #586e75;
+  font-style: italic;
+}
+
+.modal-footer {
+  background-color: #002b36;
+  border-top: 1px solid #3d5c72;
+}
+
+.modal-footer .btn-secondary {
+  background-color: #586e75;
+  color: #ffffff;
+  border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #657b83;
+}
+
+.modal-footer .btn-success {
+  background-color: #268bd2;
+  color: #ffffff;
+  border: none;
+}
+
+.modal-footer .btn-success:hover {
+  background-color: #2aa198;
 }
 
 

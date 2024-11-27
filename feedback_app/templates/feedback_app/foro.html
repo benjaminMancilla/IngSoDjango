@@ -1,78 +1,107 @@
 {% extends 'navbar.html' %}
-    {% block title %} Foro {% endblock %}
-    {% block css %}
-    <link rel="stylesheet" type="text/css" href= "/static/feedback_app/css/home-page.css">
-    {% endblock %}
-    {% block content %}
-    
+{% block title %} Foro {% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/static/feedback_app/css/home-page.css">
+{% endblock %}
+{% block content %}
+<!--
+<div id="personalInfoContainer" class="personalInfoContainer">
+  <h1>{{ user.first_name }} {{ user.last_name }}</h1> <br>
+  <p>Correo: {{ user.email }}</p> <br>
+  <p>Fecha de ingreso: {{ user.date_joined }}</p> <br>
+</div>
+-->
 
-    <div id="personalInfoContainer" class="personalInfoContainer">
-      <h1>{{user.first_name}} {{user.last_name}}</h1> <br>
-      <p>Correo: {{user.email}}</p> <br>
-      <p>Fecha de ingreso: {{date_joined}}</p> <br>
-      <p>...</p> <br>
-    </div>
-
-
-    <div class="container mt-4">
-      <div class="row">
-        <!--La lista con clases al lado -->
-        <div class="col-md-3">
-          <div class="class-list">
-            <ul class="list-group">
-              <li class="list-group-item active">Clase 1: Introducción</li>
-              <li class="list-group-item">Clase 2: Suma</li>
-              <li class="list-group-item">Clase 3: Resta</li>
-              <li class="list-group-item">Clase 4: Multiplicación</li>
-              <li class="list-group-item">Clase 5: División</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Parte principal para posts del foro y el boton de feedback o promedio general profesor -->
-        <div class="col-md-6">
-          {% if identificadores.student %}
-            <!-- Feedback Button -->
-            <form action="{% url 'form' %}" method="get">
-              <input type="hidden" name="teacher" value="{{ identificadores.teacher }}">
-              <input type="hidden" name="student" value="{{ identificadores.student }}">
-              <input type="hidden" name="subject" value="{{ identificadores.subject }}">
-              <div id="feedback-button">
-                <button class="btn btn-primary" type="submit">7d 3h 5m - Añadir Feedback</button> <!-- implementar timer -->
-              </div>
-          </form>
-          
-          {% else %}
-            <!-- Grade Button -->
-            <div id="grade-button">
-              <button class="btn btn-primary">Ver Calificación</button>
-            </div>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="class-list">
+        <ul class="list-group">
+          {% for week in weekly_averages %}
+            <li class="list-group-item">
+              Semana {{ week.week_number }}
+            </li>
+          {% endfor %}
+          {% if user.is_teacher %}
+            <li class="list-group-item text-center">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWeekModal">
+                Añadir Semana
+              </button>
+            </li>
           {% endif %}
-
-          <!-- Posts -->
-          <div id="posts-list">
-            {% for post in mensajes_foro %}
-            <div class="posts-container">
-              <div class="posts-author">
-                <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
-                <p>{{ post.name }}</p>
-              </div>
-              <div class="posts-content">
-                <p>{{ post.content }}</p>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-        </div>
-
-        <!-- Columna derecha, resumen de la clase -->
-        <div class="col-md-3">
-          <div class="summary">
-            <h4>Resumen</h4>
-            <p>Clase introductoria, hablamos sobre lo que se vera en el curso y las evaluaciones a tener.</p>
-          </div>
-        </div>
+        </ul>
       </div>
     </div>
 
-    {% endblock %}
+    
+    <div class="modal fade" id="addWeekModal" tabindex="-1" aria-labelledby="addWeekModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form action="{% url 'add_week' identificadores.teacher identificadores.subject %}" method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+              <h5 class="modal-title" id="addWeekModalLabel">Añadir Nueva Semana</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="summary" class="form-label">Resumen de la Semana</label>
+                <textarea class="form-control" id="summary" name="summary" rows="4" placeholder="Escribe el resumen de la semana..."></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-success">Guardar Semana</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="col-md-6">
+      <h4>Foro de Discusión</h4>
+
+      {% if identificadores.student %}
+        <form action="{% url 'form' %}" method="get">
+          <input type="hidden" name="teacher" value="{{ identificadores.teacher }}">
+          <input type="hidden" name="student" value="{{ identificadores.student }}">
+          <input type="hidden" name="subject" value="{{ identificadores.subject }}">
+          <div id="feedback-button">
+            <button class="btn btn-primary" type="submit">Añadir Feedback</button>
+          </div>
+        </form>
+      {% endif %}
+
+      <div id="posts-list">
+        {% for post in mensajes_foro %}
+          <div class="posts-container">
+            <div class="posts-author">
+              <img src="https://images.emojiterra.com/google/android-12l/512px/1f408.png" width="50" alt="Gato">
+              <p>{{ post.name }}</p>
+            </div>
+            <div class="posts-content">
+              <p>{{ post.content }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="summary">
+        <h4>Resumen</h4>
+        {% if weekly_averages %}
+          {% with weekly_averages|last as last_week %}
+            <p>Promedio de la última semana:</p>
+            <p><strong>{{ last_week.avg_grade }}</strong></p>
+          {% endwith %}
+        {% else %}
+          <p>No hay semanas registradas.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
