@@ -388,6 +388,7 @@ def homepage(request, subject=None, classId=None):
 @login_required
 def foro(request, teacherId, subjectId):
     user = request.user
+    subject = Subject.objects.get(id=subjectId)
 
     context = {
         'identificadores': {
@@ -399,58 +400,78 @@ def foro(request, teacherId, subjectId):
     
     context['navbar'] = navbar_context(user)
 
-    tss_list = TeacherStudentSubject.objects.filter(teacher=teacherId, subject=subjectId)
+    if user.is_student:
+        context['identificadores']['student'] = user.id
+        teacher_instance = Teacher.objects.get(user_id=teacherId)
+        
+        tss_list = TeacherStudentSubject.objects.filter(teacher=teacherId, subject=subjectId)
+        for tss in tss_list:
+            question_list = Question.objects.filter(tss=tss)
+            for question in question_list:
+                context['mensajes_foro'].append({
+                    'name': tss.student.mask,
+                    'content': question.content,
+                })
 
-    for tss in tss_list:
-        question_list = Question.objects.filter(tss=tss)
-        for question in question_list:
-            context['mensajes_foro'].append({
-                'name': tss.student.mask,
-                'content': question.content,
+        subject_resumes = SubjectResume.objects.filter(teacher=teacher_instance, subject=subject).order_by('date')
+
+        weekly_averages = []
+        for resume in subject_resumes:
+            week_number = resume.date.isocalendar()[1]
+
+            feedbacks = Feedback.objects.filter(
+                tss__teacher=teacher_instance,
+                tss__subject=subject,
+                date__week=week_number
+            )
+
+            avg_grade = 0
+            if feedbacks:
+                grades = feedbacks.values_list('grade', flat=True)
+                avg_grade = sum(grades) / len(grades)
+
+            weekly_averages.append({
+                'week_number': week_number,
+                'avg_grade': round(avg_grade, 2),
+                'date': resume.date
             })
 
-    if user.is_student:
+        context['teacher'] = teacher_instance
+        context['subject'] = subject
+        context['weekly_averages'] = weekly_averages
 
-        context['identificadores']['student'] = user.id
-        
         return render(request, 'feedback_app/foro.html', context)
+
     elif user.is_teacher:
-        ##For the moment, teacher is not implemented
+        context['identificadores']['teacher'] = user.id
+        teacher_instance = Teacher.objects.get(user=user)
+        
+        subject_resumes = SubjectResume.objects.filter(teacher=teacher_instance, subject=subject).order_by('date')
 
+        weekly_averages = []
+        for resume in subject_resumes:
+            week_number = resume.date.isocalendar()[1]
 
-        # context={
-        #     'subjectList':[],
-        #     'subjects_info':[],
-        # }
+            feedbacks = Feedback.objects.filter(
+                tss__teacher=teacher_instance,
+                tss__subject=subject,
+                date__week=week_number
+            )
 
+            avg_grade = 0
+            if feedbacks:
+                grades = feedbacks.values_list('grade', flat=True)
+                avg_grade = sum(grades) / len(grades)
 
-        # teacher_instance = Teacher.objects.get(user=user)
+            weekly_averages.append({
+                'week_number': week_number,
+                'avg_grade': round(avg_grade, 2),
+                'date': resume.date
+            })
 
-        # context['teacher'] = user.id
-        # ##Get all tuples of subjects and teachers
-        # tss_list = TeacherStudentSubject.objects.filter(teacher=teacher_instance).select_related(
-        #     'subject', 'teacher'
-        # )
-        # for tss in tss_list:
-        #     ##Get subject and teacher
-        #     subject = tss.subject
-        #     teacher = tss.teacher
-            
-            # if subject.name in socialSubjects:
-            #     context['socialSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in exactSubjects:
-            #     context['exactSubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
-            # elif subject.name in complementarySubjects:
-            #     context['complementarySubjectList'].append({
-            #         'subjectId': subject.id,
-            #         'subjectName': subject.name,
-            #     })
+        context['teacher'] = user
+        context['subject'] = subject
+        context['weekly_averages'] = weekly_averages
 
         return render(request, 'feedback_app/foro.html', context)
 
