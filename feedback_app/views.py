@@ -13,7 +13,6 @@ def calculate_deadline(start_date):
     """
     Calcula el plazo (deadline) y verifica si ya está cerrado.
     """
-    # Crear un objeto datetime directamente con la fecha y hora
     deadline = datetime(
         year=start_date.year,
         month=start_date.month,
@@ -23,7 +22,6 @@ def calculate_deadline(start_date):
         second=59
     ) + timedelta(days=7)
     
-    # Comparar con el datetime actual (sin zonas horarias)
     current_time = datetime.now()
     is_closed = deadline < current_time
 
@@ -31,7 +29,6 @@ def calculate_deadline(start_date):
 
 @login_required
 def add_week(request, teacherId, subjectId):
-    # Asegúrate de que el usuario sea profesor
     if not request.user.is_teacher:
         return redirect('home-page')
 
@@ -42,10 +39,8 @@ def add_week(request, teacherId, subjectId):
         summary = request.POST.get('summary', '').strip()
         last_resume = SubjectResume.objects.filter(teacher=teacher, subject=subject).order_by('-date').first()
 
-        # Calcular la fecha de la nueva semana
         new_date = last_resume.date + timedelta(days=7) if last_resume else date.today()
 
-        # Crear la nueva semana
         SubjectResume.objects.create(
             teacher=teacher,
             subject=subject,
@@ -53,7 +48,6 @@ def add_week(request, teacherId, subjectId):
             resume=summary if summary else f"Resumen de la semana del {new_date}"
         )
 
-        # Redirigir al foro
         return redirect('foro', teacherId=teacherId, subjectId=subjectId)
 
 
@@ -498,26 +492,6 @@ def foro(request, teacherId, subjectId, week_n=None):
 
     return render(request, 'feedback_app/foro.html', context)
 
-
-
-# def form(request, subject=None, classId=None, userId=None):
-#     if request.method == 'GET':
-#         teacherId = request.GET.get('teacher')  # Recupera lo que mandé con get
-#         teacher = Teacher.objects.get(user_id = teacherId) # Obtengo al profesor de esa clase
-
-#         # Debería accerder al nombre completo, pero por ahora solo tengo el username
-#         usernameTeacher = teacher.user.username
-#         studentId = request.GET.get('student')
-#         subjectId = request.GET.get('subject')
-
-#         context={
-#             'usernameTeacher' : usernameTeacher, # Probablemente también tenga que mandar la clase y el estudiante en POST
-#         }
-#         return render(request, 'feedback_app/form.html', context)
-    
-#     if request.method == 'POST': # lógica de mandar form
-#         #...
-#         return render(request, 'feedback_app/form.html', context)
 
 @login_required
 def form(request, teacherId=None, subjectId=None, userId=None, week_date=None):
